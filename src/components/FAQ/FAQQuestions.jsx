@@ -35,8 +35,8 @@ function FAQQuestions() {
   return (
     <div className="pt-3  ">
       <Navbar />
-      <div className="flex space-x-4 max-w-6xl mx-auto">
-        <div className="w-1/2 border-[0.2px] border-gray-200 my-2 p-10 ">
+      <div className="flex space-x-4 max-w-6xl mx-4 lg:mx-auto my-10">
+        <div className="w-full border-[0.2px] border-gray-200 my-2 p-5 lg:p-10 ">
           {data.map((item, i) => (
             <div className="mb-2" key={i + item}>
               <motion.div
@@ -119,10 +119,8 @@ function FAQQuestions() {
             </div>
           ))}
         </div>
-        <div className="w-1/3">
-          <div className="w-[600px] h-[500px]">
-            <Image src="/faq.png" priority height={600} width={500} />
-          </div>
+        <div className="w-1/2 lg:block hidden">
+            <Image src="/faq.png" priority height={500} width={500} />
         </div>
       </div>
       <Footer />
