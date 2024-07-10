@@ -42,27 +42,27 @@ function Footer() {
               <div className="w-1/3 bg-[#9748FF] h-2 rounded-full" />
             </div>
             <ul className="flex flex-row space-x-3">
-              <li className="text-[17px] hover:text-[#9748FF] duration-200 hover:scale-110">
-                <Link href={""}>
-                    <FaGithub size={30} />
-                </Link>
-              </li>
-              <li className="text-[17px] hover:text-[#9748FF] duration-200 hover:scale-110">
-                <Link href={""}>
-                <FaFacebook size={30} />
-                </Link>
-              </li>
-              <li className="text-[17px] hover:text-[#9748FF] duration-200 hover:scale-110">
-                <Link href={""}>
-                    <FaSquareYoutube size={30} />
-                </Link>
-              </li>
+              <Link href={"https://github.com/5Y3D-Bilal"}>
+                <li className="text-[17px] hover:text-[#9748FF] duration-200 hover:scale-110">
+                  <FaGithub size={30} />
+                </li>
+              </Link>
+              <Link href={"https://facebook.com"}>
+                <li className="text-[17px] hover:text-[#9748FF] duration-200 hover:scale-110">
+                  <FaFacebook size={30} />
+                </li>
+              </Link>
+              <Link href={"https://www.youtube.com/channel/UCMQ1lEMBBF0HYHRtVLzUl_A"}>
+                <li className="text-[17px] hover:text-[#9748FF] duration-200 hover:scale-110">
+                  <FaSquareYoutube size={30} />
+                </li>
+              </Link>
             </ul>
           </div>
         </div>
         <hr className="mt-20" />
         <div>
-            <h6>@ Copyright by Bestie</h6>
+          <h6>@ Copyright by Bestie</h6>
         </div>
       </div>
     </div>
