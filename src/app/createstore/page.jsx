@@ -1,11 +1,12 @@
-import React from 'react'
+import React from "react";
+import Stepper from "../../components/CreateStoreStepper/CreateStoreStepper";
 
-function page() {
+function CreateStore() {
   return (
-    <div>
-      
+    <div className="max-w-6xl mx-auto py-20">
+      <Stepper />
     </div>
-  )
+  );
 }
 
-export default page
+export default CreateStore;
