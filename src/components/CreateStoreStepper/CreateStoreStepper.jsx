@@ -1,93 +1,30 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TiTick } from "react-icons/ti";
 import Loader from "../Loading/Loader";
 import Image from "next/image";
 import { LuUploadCloud } from "react-icons/lu";
+import { storage } from "@/Firebase/firebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
-const Stepper = () => {
+const Stepper = ({ userId }) => {
+  const router = useRouter();
+
   const steps = ["Store Details", "Your Details", "Complete"];
-  const [currentStep, setCurrentStep] = useState(1);
   const [complete, setComplete] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
 
-  const renderContent = () => {
-    switch (currentStep) {
-      case 1:
-        return (
-          <div className="border-[0.5px] rounded-2xl border-gray-300 px-10 py-10 mx-4 lg:mx-0">
-            <h1 className="text-[25px] font-bold text-center mb-3">
-              Enter your store details here.
-            </h1>
-            <div className=" flex flex-col space-y-3">
-              <input
-                type="text"
-                placeholder="Store Name"
-                className="border-[0.5px] rounded-2xl border-gray-200 focus:outline-none py-4 px-5 focus-within:border-blue-400"
-              />
-              <form class="w-full mx-auto">
-                <select
-                  id="default"
-                  class="bg-white border border-white text-gray-900 py-5 px-5 text-sm rounded-2xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-300 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                >
-                  <option selected>Choose Store Type</option>
-                  <option value="Individual">Individual</option>
-                  <option value="Business">Business</option>
-                </select>
-              </form>
-              <div className="border-[0.5px] border-gray-300 rounded-2xl">
-                <input
-                  type="file"
-                  className="hidden"
-                  id="upload"
-                  accept=".png, .jpg , .gif"
-                  onChange={handleFileChange}
-                />
-                {loading ? (
-                  <div className="bg-white rounded-md">
-                    <Loader />
-                  </div>
-                ) : pervViewImage && loading === false ? (
-                  <div className="bg-white py-5 px-5 flex justify-center items-center rounded-md flex-col">
-                    <Image
-                      src={pervViewImage}
-                      className="rounded-full w-[60px] h-[60px]"
-                      width={50}
-                      height={50}
-                    />
-                  </div>
-                ) : (
-                  <label
-                    htmlFor="upload"
-                    className="bg-white py-5 px-5 flex justify-center items-center rounded-md flex-col"
-                  >
-                    <LuUploadCloud color="black" size={25} />
-                    <span className="text-black text-[13px]">
-                      Upload your profile image.
-                    </span>
-                  </label>
-                )}
-              </div>
-            </div>
-          </div>
-        );
-      case 2:
-        return (
-          <div>
-            <h2>Your Details</h2>
-            <p>Enter your personal details here.</p>
-          </div>
-        );
-      case 3:
-        return (
-          <div>
-            <h2>Complete</h2>
-            <p>You have completed all steps!</p>
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
+  const [error, setErrors] = useState([]);
+  const [values, setValues] = useState({
+    storeName: "",
+    storeBanner: "",
+    storeType: "",
+    sellerPhoneNum: "",
+    sellerAddress: "",
+    sellerId: userId,
+  });
 
   const [pervViewImage, setPervViewImage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -99,9 +36,222 @@ const Stepper = () => {
       const storageRef = ref(storage, `store/${image.name}`);
       await uploadBytes(storageRef, image);
       downloadURL = await getDownloadURL(storageRef);
-      setValues((prev) => ({ ...prev, profileImage: downloadURL }));
+      setValues((prev) => ({ ...prev, storeBanner: downloadURL }));
       setPervViewImage(downloadURL);
       setLoading(false);
+    }
+  };
+
+  const completeStoreCreattion = async () => {
+    try {
+      const res = await axios.post(
+        "http://localhost:4000/api/store/create",
+        values,
+        {
+          withCredentials: true,
+        }
+      );
+      router.push("/");
+    } catch (err) {
+      if (err.response && err.response.data && err.response.data.errors) {
+        setErrors(err.response.data.errors);
+        console.log(err.response.data.errors);
+        return (
+          <div class="flex flex-col gap-2 w-60 sm:w-72 text-[10px] sm:text-xs z-50">
+            <div class="error-alert cursor-default flex items-center justify-between w-full h-12 sm:h-14 rounded-lg bg-[#232531] px-[10px]">
+              <div class="flex gap-2">
+                <div class="text-[#d65563] bg-white/5 backdrop-blur-xl p-1 rounded-lg">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                    ></path>
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-white">Please try again</p>
+                  <p class="text-gray-500">This is the description part</p>
+                </div>
+              </div>
+              <button class="text-gray-600 hover:bg-white/10 p-1 rounded-md transition-colors ease-linear">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6 18 18 6M6 6l12 12"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        );
+      } else {
+        setErrors([{ msg: "An unexpected error occurred." }]);
+      }
+    }
+  };
+  const renderContent = () => {
+    switch (currentStep) {
+      case 1:
+        return (
+          <>
+            <div className="border-[0.5px] rounded-2xl border-gray-300 px-10 py-10 mx-4 lg:mx-0">
+              <h1 className="text-[25px] font-bold text-center mb-3">
+                Enter your store details here.
+              </h1>
+              <div className=" flex flex-col space-y-3">
+                <input
+                  type="text"
+                  onChange={(e) =>
+                    setValues({ ...values, storeName: e.target.value })
+                  }
+                  placeholder="Store Name"
+                  className="border-[0.5px] rounded-2xl border-gray-200 focus:outline-none py-4 px-5 focus-within:border-blue-400"
+                />
+                <form className="w-full mx-auto">
+                  <select
+                    id="default"
+                    onChange={(e) =>
+                      setValues({ ...values, storeType: e.target.value })
+                    }
+                    className="bg-white border border-white text-gray-900 py-5 px-5 text-sm rounded-2xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-300 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  >
+                    <option defaultValue>Choose Store Type</option>
+                    <option value="Individual">Individual</option>
+                    <option value="Business">Business</option>
+                  </select>
+                </form>
+                <div className="border-[0.5px] border-gray-300 rounded-2xl">
+                  <input
+                    type="file"
+                    className="hidden"
+                    id="upload"
+                    accept=".png, .jpg , .gif"
+                    onChange={handleFileChange}
+                  />
+                  {loading ? (
+                    <div className="bg-white rounded-md">
+                      <Loader />
+                    </div>
+                  ) : pervViewImage && loading === false ? (
+                    <div className="bg-white py-5 px-5 flex justify-center items-center rounded-md flex-col">
+                      <Image
+                        src={pervViewImage}
+                        className="rounded-full w-[60px] h-[60px]"
+                        width={50}
+                        height={50}
+                        alt="storebannerImage"
+                      />
+                    </div>
+                  ) : (
+                    <label
+                      htmlFor="upload"
+                      className="bg-white py-5 px-5 flex justify-center items-center rounded-md flex-col"
+                    >
+                      <LuUploadCloud color="black" size={25} />
+                      <span className="text-black text-[13px]">
+                        Upload a banner image for your store.
+                      </span>
+                    </label>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="mt-5 flex justify-end">
+              {!complete && (
+                <button
+                  className="btn w-28 h-12 bg-white disabled:border-gray-200 cursor-pointer rounded-3xl border-2 border-[#9748FF] shadow-[inset_0px_-2px_0px_1px_#9748FF] group disabled:bg-gray-200 hover:text-white hover:bg-[#9748FF] transition duration-300 ease-in-out"
+                  onClick={() => {
+                    currentStep === steps.length
+                      ? setComplete(true)
+                      : setCurrentStep((prev) => prev + 1);
+                  }}
+                  disabled={
+                    !values.storeBanner ||
+                    !values.storeName ||
+                    !values.storeBanner
+                  }
+                >
+                  {currentStep === steps.length ? "Finish" : "Next"}
+                </button>
+              )}
+            </div>
+          </>
+        );
+      case 2:
+        return (
+          <>
+            <div className="border-[0.5px] rounded-2xl border-gray-300 px-10 py-10 mx-4 lg:mx-0">
+              <h1 className="text-[25px] font-bold text-center mb-3">
+                Enter your personal details.
+              </h1>
+              <div className=" flex flex-col space-y-3">
+                <input
+                  type="text"
+                  onChange={(e) =>
+                    setValues({ ...values, sellerPhoneNum: e.target.value })
+                  }
+                  placeholder="Phone Number"
+                  className="border-[0.5px] rounded-2xl border-gray-200 focus:outline-none py-4 px-5 focus-within:border-blue-400"
+                />
+                <input
+                  type="text"
+                  onChange={(e) =>
+                    setValues({ ...values, sellerAddress: e.target.value })
+                  }
+                  placeholder="Your address"
+                  className="border-[0.5px] rounded-2xl border-gray-200 focus:outline-none py-4 px-5 focus-within:border-blue-400"
+                />
+              </div>
+            </div>
+            <div className="mt-5 flex justify-end">
+              {!complete && (
+                <button
+                  className="btn w-28 h-12 bg-white disabled:border-gray-200 cursor-pointer rounded-3xl border-2 border-[#9748FF] shadow-[inset_0px_-2px_0px_1px_#9748FF] group disabled:bg-gray-200 hover:text-white hover:bg-[#9748FF] transition duration-300 ease-in-out"
+                  onClick={() => {
+                    currentStep === steps.length
+                      ? setComplete(true)
+                      : setCurrentStep((prev) => prev + 1);
+                  }}
+                  //   disabled={!values.sellerAddress || !values.sellerPhoneNum}
+                >
+                  {currentStep === steps.length ? "Finish" : "Next"}
+                </button>
+              )}
+            </div>
+          </>
+        );
+      case 3:
+        return (
+          <div className="flex justify-center items-center flex-col">
+            <h1 className="text-[25px] font-bold text-center mb-3">
+              Complete your store creation by clicking on complete button below!
+            </h1>
+            <button
+              className="btn w-28 h-12 bg-white disabled:border-gray-200 cursor-pointer rounded-3xl border-2 border-[#9748FF] shadow-[inset_0px_-2px_0px_1px_#9748FF] group disabled:bg-gray-200 hover:text-white hover:bg-[#9748FF] transition duration-300 ease-in-out"
+              onClick={completeStoreCreattion}
+            >
+              Complete
+            </button>
+          </div>
+        );
+      default:
+        return null;
     }
   };
 
@@ -125,21 +275,6 @@ const Stepper = () => {
 
       <div className="mt-14 flex flex-col">
         <div className="step-content">{renderContent()}</div>
-
-        <div className="mt-5 flex justify-end">
-          {!complete && (
-            <button
-              className="btn w-28 h-12 bg-white cursor-pointer rounded-3xl border-2 border-[#9748FF] shadow-[inset_0px_-2px_0px_1px_#9748FF] group hover:bg-[#9748FF] transition duration-300 ease-in-out"
-              onClick={() => {
-                currentStep === steps.length
-                  ? setComplete(true)
-                  : setCurrentStep((prev) => prev + 1);
-              }}
-            >
-              {currentStep === steps.length ? "Finish" : "Next"}
-            </button>
-          )}
-        </div>
       </div>
     </>
   );

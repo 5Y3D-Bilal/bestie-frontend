@@ -144,7 +144,7 @@ function Navbar() {
                             </Link>
                           ) : (
                             <Link
-                              href="/createstore"
+                              href={`/createstore/${currentUser?.id}`}
                               className="block px-4 py-2 text-sm text-gray-700"
                               role="menuitem"
                               tabIndex="-1"
@@ -180,8 +180,9 @@ function Navbar() {
           } max-w-6xl mx-5 lg:mx-auto`}
         >
           <div className="flex justify-between items-center  py-1 ">
-            <Link href='/'>
-            <Image src={logo} width="100" height="100" alt="SiteLogo" /></Link>
+            <Link href="/">
+              <Image src={logo} width="100" height="100" alt="SiteLogo" />
+            </Link>
             <div className="flex items-center space-x-3">
               <div>
                 <div className="lg:flex items-center space-x-4 hidden">
@@ -258,7 +259,7 @@ function Navbar() {
                               </Link>
                             ) : (
                               <Link
-                                href="/createstore"
+                                href={`/createstore/${currentUser?.id}`}
                                 className="block px-4 py-2 text-sm text-gray-700"
                                 role="menuitem"
                                 tabIndex="-1"
