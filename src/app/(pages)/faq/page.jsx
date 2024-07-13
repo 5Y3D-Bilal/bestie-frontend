@@ -1,5 +1,5 @@
 import React from "react";
-import FAQQuestions from "../../components/FAQ/FAQQuestions";
+import FAQQuestions from "../../../components/FAQ/FAQQuestions";
 
 function page() {
   return (

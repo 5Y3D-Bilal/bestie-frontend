@@ -190,7 +190,6 @@ function SingleStoreClientSideComponent({ storeData }) {
     }
   };
   
-  console.log(currentUser?.followedStores)
   return (
     <div>
       <div className="flex justify-between space-x-10">
@@ -217,7 +216,6 @@ function SingleStoreClientSideComponent({ storeData }) {
                     src={storeData.storeLogo}
                     className="w-[100px] h-[100px] rounded-full"
                     alt="logo"
-                    layout="fixed"
                     width={300}
                     height={300}
                   />

@@ -4,20 +4,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 // SSR RENDERING FOR GETTING STORE DATA
-export async function generateStaticParams() {
-  try {
-    const res = await axios.get("http://localhost:4000/api/store");
-    const stores = res.data;
-
-    return stores.map((store) => ({
-      id: store._id.toString(),
-    }));
-  } catch (error) {
-    console.error("Error generating static params:", error);
-    return [];
-  }
-}
-
 async function getStoreData(id) {
   try {
     const res = await axios.get(`http://localhost:4000/api/store/${id}`);

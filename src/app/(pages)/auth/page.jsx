@@ -1,5 +1,5 @@
 import React from "react";
-import AuthModel from "../../components/Auth/AuthModle";
+import AuthModel from "../../../components/Auth/AuthModle";
 
 function Auth() {
  
