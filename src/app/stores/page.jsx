@@ -1,5 +1,5 @@
 import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
+import Navbar from "../../components/Navbar";
 import StoresClientSideComponent from "../../components/StoreClientSideComponents/StoresClientSideComponent";
 import React from "react";
 import axios from "axios";

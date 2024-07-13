@@ -27,10 +27,12 @@ const getCurrentUser = async () => {
 function SingleStoreClientSideComponent({ storeData }) {
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState(null);
+  const [isFollowing, setIsFollowing] = useState(false);
   useEffect(() => {
     const fetchCurrentUser = async () => {
       const user = await getCurrentUser();
       setCurrentUser(user);
+      setIsFollowing(storeData.followers.includes(user?.id));
     };
 
     fetchCurrentUser();
@@ -152,32 +154,43 @@ function SingleStoreClientSideComponent({ storeData }) {
     setResults(results);
   };
 
-  const HandleSubmitFollow = () => {
-    const res = axios.put(
-      "http://localhost:4000/api/store/follow",
-      {
-        id: currentUser.id,
-        storeId: storeData._id,
-      },
-      { withCredentials: true }
-    );
-    console.log(res);
-    router.refresh();
+  const HandleSubmitFollow = async () => {
+    setIsFollowing(true);
+    try {
+      await axios.put(
+        "http://localhost:4000/api/store/follow",
+        {
+          id: currentUser.id,
+          storeId: storeData._id,
+        },
+        { withCredentials: true }
+      );
+      router.refresh()
+    } catch (error) {
+      console.error("Error following store", error);
+      setIsFollowing(false); // Revert the state if request fails
+    }
   };
 
-  const HandleSubmitUnFollow = () => {
-    const res = axios.put(
-      "http://localhost:4000/api/store/unfollow",
-      {
-        id: currentUser.id,
-        storeId: storeData._id,
-      },
-      { withCredentials: true }
-    );
-    console.log(res);
-    router.refresh();
+  const HandleSubmitUnFollow = async () => {
+    setIsFollowing(false);
+    try {
+      await axios.put(
+        "http://localhost:4000/api/store/unfollow",
+        {
+          id: currentUser.id,
+          storeId: storeData._id,
+        },
+        { withCredentials: true }
+      );
+      router.refresh()
+    } catch (error) {
+      console.error("Error unfollowing store", error);
+      setIsFollowing(true); // Revert the state if request fails
+    }
   };
-
+  
+  console.log(currentUser?.followedStores)
   return (
     <div>
       <div className="flex justify-between space-x-10">
@@ -227,27 +240,20 @@ function SingleStoreClientSideComponent({ storeData }) {
                     </div>
                   </div>
                 </div>
-                {storeData.followers.map(
-                  (i) =>
-                    i === currentUser?.id && (
-                      <div className="mr-10" onClick={HandleSubmitUnFollow}>
-                        <button className="w-28 h-12 bg-white cursor-pointer rounded-3xl font-medium text-[#333] group-hover:text-white border-2 border-[#9748FF] shadow-[inset_0px_-2px_0px_1px_#9748FF] group hover:bg-[#9748FF] transition duration-300 ease-in-out">
-                          Following
-                        </button>
-                      </div>
-                    )
-                )}
 
                 <div
-                  className={`${storeData.followers.map(
-                    (i) => i === currentUser?.id && "hidden"
-                  )} mr-10`}
-                  onClick={HandleSubmitFollow}
+                  onClick={
+                    isFollowing ? HandleSubmitUnFollow : HandleSubmitFollow
+                  }
                 >
                   <button
-                    className={` w-28 h-12 bg-white cursor-pointer rounded-3xl font-medium text-[#333] group-hover:text-white border-2 border-[#9748FF] shadow-[inset_0px_-2px_0px_1px_#9748FF] group hover:bg-[#9748FF] transition duration-300 ease-in-out`}
+                    className={`w-28 h-12 ${
+                      isFollowing
+                        ? "bg-white text-[#333]"
+                        : "bg-[#9748FF] text-white"
+                    } cursor-pointer rounded-3xl font-medium border-2 border-[#9748FF] shadow-[inset_0px_-2px_0px_1px_#9748FF] transition duration-300 ease-in-out`}
                   >
-                    Follow
+                    {isFollowing ? "Following" : "Follow"}
                   </button>
                 </div>
               </div>

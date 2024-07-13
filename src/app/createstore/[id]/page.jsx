@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Stepper from "../../../components/CreateStoreStepper/CreateStoreStepper";
-import Navbar from "@/components/Navbar";
+import Navbar from "../../../components/Navbar";
 import Footer from "@/components/Footer";
 import { useParams } from "next/navigation";
 

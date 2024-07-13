@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
 import RecoilWrapper from "@/components/RecoilWrapper/Wrapper";
-import Navbar from '../components/Navbar'
+
 
 const inter = Roboto({
   weight: '400',

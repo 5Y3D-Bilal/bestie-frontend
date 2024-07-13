@@ -33,7 +33,7 @@ function FAQQuestions() {
     setState(i);
   };
   return (
-    <div className="pt-3  ">
+    <div className="pt-20  ">
       <Navbar />
       <div className="flex space-x-4 max-w-6xl mx-4 lg:mx-auto my-10">
         <div className="w-full border-[0.2px] border-gray-200 my-2 p-5 lg:p-10 ">

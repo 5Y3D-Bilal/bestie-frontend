@@ -1,51 +1,24 @@
 import axios from "axios";
-import React from "react";
-import SingleStoreClientSideComponent from "../../../components/StoreClientSideComponents/SingleStoreClientSideComponent";
+import SingleStoreClientSideComponent from "@/components/StoreClientSideComponents/SingleStoreClientSideComponent";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 // SSR RENDERING FOR GETTING STORE DATA
 const getStore = async (id) => {
-  const res = await axios
-    .get(`http://localhost:4000/api/store/${id}`)
-    .then((res) => {
-      return res.data;
-    });
-  return res;
+  const res = await axios.get(`http://localhost:4000/api/store/${id}`);
+  return res.data;
 };
 
-async function fetchCurrentUser(cookie) {
-  try {
-    const res = await axios.get("http://localhost:4000/api/currentuser", {
-      headers: {
-        Cookie: cookie || "", // Pass the cookies to the server request
-      },
-      withCredentials: true,
-    });
-    return res.data?.currentUser;
-  } catch (error) {
-    console.error("Error fetching current user", error);
-    return null;
-  }
-}
-
-async function page({ params, req }) {
+export default async function StorePage({ params, req }) {
   const { id } = params;
-  const getStoree = await getStore(id);
-  const cookie = req ? req.headers.cookie : "";
-  const currentUser = await fetchCurrentUser(cookie);
+  const storeData = await getStore(id);
   return (
     <div>
       <Navbar />
       <div className="max-w-6xl mx-auto mt-36 mb-10">
-        <SingleStoreClientSideComponent
-          storeData={getStoree}
-          userData={currentUser}
-        />
+        <SingleStoreClientSideComponent storeData={storeData} />
       </div>
       <Footer />
     </div>
   );
 }
-
-export default page;

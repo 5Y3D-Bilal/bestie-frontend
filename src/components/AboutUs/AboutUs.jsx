@@ -5,7 +5,7 @@ import Footer from "../Footer";
 
 function AboutUs() {
   return (
-    <div className="pt-3  ">
+    <div className="pt-20  ">
       <Navbar />
       <div className="flex space-x-4 max-w-6xl lg:mx-auto my-10 mx-4">
         <div className="w-full border-[0.2px] border-gray-200 my-2 p-10 ">
