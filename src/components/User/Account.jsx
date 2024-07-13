@@ -53,7 +53,7 @@ function Account({ UserData }) {
 
   const UploadBanner = async () => {
     const res = await axios.put(
-      `http://localhost:4000/api/user/${UserData.userId}`,
+      `https://bestie-frontend.vercel.app/api/user/${UserData.userId}`,
       { profileBanner: values.profileBanner },
       {
         withCredentials: true,

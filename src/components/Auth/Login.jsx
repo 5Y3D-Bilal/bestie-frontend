@@ -35,16 +35,13 @@ function Login() {
       setErrors([]);
       const response = await axios.post(
         "https://besty-backend.vercel.app/api/login",
-        values,
-        {
-          withCredentials: true,
-        }
+        values
       );
       router.push("/");
     } catch (err) {
       if (err.response && err.response.data && err.response.data.errors) {
         setErrors(err.response.data.errors);
-        console.log(err.response.data.errors)
+        console.log(err.response.data.errors);
       } else {
         setErrors([{ msg: "An unexpected error occurred." }]);
       }
