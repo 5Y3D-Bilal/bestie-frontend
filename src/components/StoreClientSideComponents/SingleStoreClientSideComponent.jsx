@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 
 const getCurrentUser = async () => {
   try {
-    const res = await axios.get("https://besty-backend.vercel.app/api/currentuser", {
+    const res = await axios.get("http://localhost:4000/api/currentuser", {
       withCredentials: true,
     });
     return res.data?.currentUser;
@@ -158,7 +158,7 @@ function SingleStoreClientSideComponent({ storeData }) {
     setIsFollowing(true);
     try {
       await axios.put(
-        "https://besty-backend.vercel.app/api/store/follow",
+        "http://localhost:4000/api/store/follow",
         {
           id: currentUser.id,
           storeId: storeData._id,
@@ -176,7 +176,7 @@ function SingleStoreClientSideComponent({ storeData }) {
     setIsFollowing(false);
     try {
       await axios.put(
-        "https://besty-backend.vercel.app/api/store/unfollow",
+        "http://localhost:4000/api/store/unfollow",
         {
           id: currentUser.id,
           storeId: storeData._id,
