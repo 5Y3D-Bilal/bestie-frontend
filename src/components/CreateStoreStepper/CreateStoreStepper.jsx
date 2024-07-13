@@ -49,7 +49,8 @@ const Stepper = ({ userId }) => {
     try {
       const res = await axios.post(
         "https://besty-backend.vercel.app/api/store/create",
-        values
+        values,
+        { withCredentials: true }
       );
       router.push("/");
       router.refresh();
