@@ -8,14 +8,6 @@ const nextConfig = {
       },
     ],
   },
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: 'https://besty-backend.vercel.app/api/:path*', // Proxy to backend API
-      },
-    ];
-  },
 };
 
 export default nextConfig;
