@@ -7,7 +7,7 @@ import { FaFacebook } from "react-icons/fa6";
 
 function Footer() {
   return (
-    <div className="bg-[#181818] w-full text-white py-20">
+    <div className="bg-[#181818] w-full text-white py-20 z-50">
       <div className="max-w-6xl mx-5 lg:mx-auto">
         <div className="flex lg:flex-row flex-col justify-between items-start">
           <div className="w-2/4">

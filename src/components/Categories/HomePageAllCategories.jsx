@@ -187,18 +187,6 @@ function HomePageAllCategories() {
           </div>
         </div>
       </div>
-      {/* <form class="max-w-sm mx-auto">
-        <select
-          id="default"
-          class="bg-white border border-white text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        >
-          <option selected>Choose a country</option>
-          <option value="US">United States</option>
-          <option value="CA">Canada</option>
-          <option value="FR">France</option>
-          <option value="DE">Germany</option>
-        </select>
-      </form> */}
     </div>
   );
 }

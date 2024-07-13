@@ -19,11 +19,14 @@ const Stepper = ({ userId }) => {
   const [error, setErrors] = useState([]);
   const [values, setValues] = useState({
     storeName: "",
-    storeBanner: "",
+    storeLogo: "",
     storeType: "",
     sellerPhoneNum: "",
     sellerAddress: "",
     sellerId: userId,
+    sellerCity: "",
+    storeCategories: "",
+    storeDescription: "",
   });
 
   const [pervViewImage, setPervViewImage] = useState("");
@@ -36,7 +39,7 @@ const Stepper = ({ userId }) => {
       const storageRef = ref(storage, `store/${image.name}`);
       await uploadBytes(storageRef, image);
       downloadURL = await getDownloadURL(storageRef);
-      setValues((prev) => ({ ...prev, storeBanner: downloadURL }));
+      setValues((prev) => ({ ...prev, storeLogo: downloadURL }));
       setPervViewImage(downloadURL);
       setLoading(false);
     }
@@ -52,6 +55,7 @@ const Stepper = ({ userId }) => {
         }
       );
       router.push("/");
+      router.refresh()
     } catch (err) {
       if (err.response && err.response.data && err.response.data.errors) {
         setErrors(err.response.data.errors);
@@ -105,6 +109,143 @@ const Stepper = ({ userId }) => {
       }
     }
   };
+
+  const storeCategories = ["Shop", "ShowRoom", "WholeSaler", "Distributor"];
+  const sellerCity = [
+    "Lahore",
+    "Faisalabad",
+    "Rawalpindi",
+    "Gujranwala",
+    "Multan",
+    "Sialkot",
+    "Sargodha",
+    "Bahawalpur",
+    "Sheikhupura",
+    "Rahim Yar Khan",
+    "Jhelum",
+    "Gujrat",
+    "Sahiwal",
+    "Okara",
+    "Kasur",
+    "Chiniot",
+    "Mianwali",
+    "Hafizabad",
+    "Khanewal",
+    "Dera Ghazi Khan",
+    "Mandi Bahauddin",
+    "Attock",
+    "Bhakkar",
+    "Toba Tek Singh",
+    "Layyah",
+    "Vehari",
+    "Chakwal",
+    "Narowal",
+    "Rajanpur",
+    "Lodhran",
+    "Pakpattan",
+    "Muzaffargarh",
+    "Khushab",
+    "Jhang",
+    "Nankana Sahib",
+    "Muzaffarabad",
+    "Mirpur",
+    "Kotli",
+    "Bhimber",
+    "Rawalakot",
+    "Bagh",
+    "Neelum",
+    "Hattian",
+    "Poonch",
+    "Sudhanoti",
+    "Gilgit",
+    "Skardu",
+    "Hunza",
+    "Nagar",
+    "Ghanche",
+    "Ghizer",
+    "Diamer",
+    "Astore",
+    "Quetta",
+    "Khuzdar",
+    "Turbat",
+    "Chaman",
+    "Gwadar",
+    "Sibi",
+    "Jaffarabad",
+    "Naseerabad",
+    "Loralai",
+    "Kharan",
+    "Zhob",
+    "Dera Bugti",
+    "Ziarat",
+    "Mastung",
+    "Kalat",
+    "Awaran",
+    "Lasbela",
+    "Kech",
+    "Panjgur",
+    "Pishin",
+    "Qila Abdullah",
+    "Qila Saifullah",
+    "Kohlu",
+    "Barkhan",
+    "Washuk",
+    "Harnai",
+    "Sherani",
+    "Peshawar",
+    "Abbottabad",
+    "Mardan",
+    "Mingora",
+    "Mansehra",
+    "Kohat",
+    "Dera Ismail Khan",
+    "Swabi",
+    "Bannu",
+    "Charsadda",
+    "Nowshera",
+    "Swat",
+    "Lakki Marwat",
+    "Haripur",
+    "Karak",
+    "Malakand",
+    "Dir",
+    "Hangu",
+    "Batagram",
+    "Tank",
+    "Buner",
+    "Shangla",
+    "Upper Dir",
+    "Lower Dir",
+    "Chitral",
+    "Kohistan",
+    "Torghar",
+    "Orakzai",
+    "Karachi",
+    "Hyderabad",
+    "Sukkur",
+    "Larkana",
+    "Nawabshah (Shaheed Benazirabad)",
+    "Mirpur Khas",
+    "Jacobabad",
+    "Shikarpur",
+    "Khairpur",
+    "Thatta",
+    "Dadu",
+    "Badin",
+    "Umerkot",
+    "Ghotki",
+    "Tando Adam",
+    "Tando Muhammad Khan",
+    "Kashmore",
+    "Jamshoro",
+    "Matiari",
+    "Sanghar",
+    "Naushahro Feroze",
+    "Qambar Shahdadkot",
+    "Tharparkar",
+    "Sujawal",
+  ];
+
   const renderContent = () => {
     switch (currentStep) {
       case 1:
@@ -123,6 +264,14 @@ const Stepper = ({ userId }) => {
                   placeholder="Store Name"
                   className="border-[0.5px] rounded-2xl border-gray-200 focus:outline-none py-4 px-5 focus-within:border-blue-400"
                 />
+                <input
+                  type="text"
+                  onChange={(e) =>
+                    setValues({ ...values, storeDescription: e.target.value })
+                  }
+                  placeholder="Store Description"
+                  className="border-[0.5px] rounded-2xl border-gray-200 focus:outline-none py-4 px-5 focus-within:border-blue-400"
+                />
                 <form className="w-full mx-auto">
                   <select
                     id="default"
@@ -134,6 +283,22 @@ const Stepper = ({ userId }) => {
                     <option defaultValue>Choose Store Type</option>
                     <option value="Individual">Individual</option>
                     <option value="Business">Business</option>
+                  </select>
+                </form>
+                <form className="w-full mx-auto">
+                  <select
+                    id="default"
+                    onChange={(e) =>
+                      setValues({ ...values, storeCategories: e.target.value })
+                    }
+                    className="bg-white border border-white text-gray-900 py-5 px-5 text-sm rounded-2xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-300 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  >
+                    <option defaultValue>Choose Store Categories</option>
+                    {storeCategories.map((i) => (
+                      <option value={i} key={i}>
+                        {i}
+                      </option>
+                    ))}
                   </select>
                 </form>
                 <div className="border-[0.5px] border-gray-300 rounded-2xl">
@@ -181,11 +346,6 @@ const Stepper = ({ userId }) => {
                       ? setComplete(true)
                       : setCurrentStep((prev) => prev + 1);
                   }}
-                  disabled={
-                    !values.storeBanner ||
-                    !values.storeName ||
-                    !values.storeBanner
-                  }
                 >
                   {currentStep === steps.length ? "Finish" : "Next"}
                 </button>
@@ -202,7 +362,8 @@ const Stepper = ({ userId }) => {
               </h1>
               <div className=" flex flex-col space-y-3">
                 <input
-                  type="text"
+                  type="tel"
+                  value={values.sellerPhoneNum}
                   onChange={(e) =>
                     setValues({ ...values, sellerPhoneNum: e.target.value })
                   }
@@ -211,12 +372,29 @@ const Stepper = ({ userId }) => {
                 />
                 <input
                   type="text"
+                  value={values.sellerAddress}
                   onChange={(e) =>
                     setValues({ ...values, sellerAddress: e.target.value })
                   }
                   placeholder="Your address"
                   className="border-[0.5px] rounded-2xl border-gray-200 focus:outline-none py-4 px-5 focus-within:border-blue-400"
                 />
+                <form className="w-full mx-auto">
+                  <select
+                    id="default"
+                    onChange={(e) =>
+                      setValues({ ...values, sellerCity: e.target.value })
+                    }
+                    className="bg-white border border-white text-gray-900 py-5 px-5 text-sm rounded-2xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-300 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  >
+                    <option defaultValue>Choose Your City</option>
+                    {sellerCity.map((i) => (
+                      <option value={i} key={i}>
+                        {i}
+                      </option>
+                    ))}
+                  </select>
+                </form>
               </div>
             </div>
             <div className="mt-5 flex justify-end">
@@ -273,7 +451,7 @@ const Stepper = ({ userId }) => {
         ))}
       </div>
 
-      <div className="mt-14 flex flex-col">
+      <div className="my-14 flex flex-col">
         <div className="step-content">{renderContent()}</div>
       </div>
     </>

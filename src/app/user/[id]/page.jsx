@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import UserClientSide from '../../../components/User/UserClientSide'
 
-// SSR RENDERING
+// SSR RENDERING FOR GETTING LOGINED USER DATA
 const getUser = async (id) => {
   const res = await axios
     .get(`http://localhost:4000/api/user/${id}`)

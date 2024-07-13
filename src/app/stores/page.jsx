@@ -1,14 +1,42 @@
-import Footer from '@/components/Footer'
-import Navbar from '@/components/Navbar'
-import React from 'react'
+import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
+import StoresClientSideComponent from "../../components/StoreClientSideComponents/StoresClientSideComponent";
+import React from "react";
+import axios from "axios";
 
-function Stores() {
+// SSR RENDERING FOR GETTING ALL STORES
+const getAllStores = async () => {
+  const res = await axios
+    .get(`http://localhost:4000/api/stores`)
+    .then((res) => {
+      return res.data;
+    });
+  return res;
+};
+
+// SSR RENDERING FOR GETTING ALL STORES
+const getAllVerifiedStores = async () => {
+  const res = await axios
+    .get(`http://localhost:4000/api/stores/verified`)
+    .then((res) => {
+      return res.data;
+    });
+  return res;
+};
+
+async function Stores() {
+  const storesData = await getAllStores();
+  const verifiedStores = await getAllVerifiedStores();
   return (
-    <div>
-       <Navbar />
-       <Footer />
-    </div>
-  )
+    <>
+      <Navbar />
+      <StoresClientSideComponent
+        storesData={storesData}
+        verifiedStores={verifiedStores}
+      />
+      <Footer />
+    </>
+  );
 }
 
-export default Stores
+export default Stores;
