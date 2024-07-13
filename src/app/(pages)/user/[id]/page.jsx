@@ -6,7 +6,7 @@ import UserClientSide from "../../../../components/User/UserClientSide";
 // SSR RENDERING FOR GETTING LOGINED USER DATA
 const getUser = async (id) => {
   const res = await axios
-    .get(`http://localhost:4000/api/user/${id}`)
+    .get(`https://besty-backend.vercel.app/api/user/${id}`)
     .then((res) => {
       return res.data;
     });
