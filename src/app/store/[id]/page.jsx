@@ -9,7 +9,7 @@ const getStore = async (id) => {
   return res.data;
 };
 
-export default async function StorePage({ params, req }) {
+export default async function StorePage({ params }) {
   const { id } = params;
   const storeData = await getStore(id);
   return (
