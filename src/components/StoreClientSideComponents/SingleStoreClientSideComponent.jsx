@@ -14,9 +14,9 @@ import { useRouter } from "next/navigation";
 
 const getCurrentUser = async () => {
   try {
-    const res = await axios.get("https://besty-backend.vercel.app/api/currentuser", {
-      withCredentials: true,
-    });
+    const res = await axios.get(
+      "https://besty-backend.vercel.app/api/currentuser"
+    );
     return res.data?.currentUser;
   } catch (error) {
     console.error("Error fetching current user", error);
@@ -157,15 +157,11 @@ function SingleStoreClientSideComponent({ storeData }) {
   const HandleSubmitFollow = async () => {
     setIsFollowing(true);
     try {
-      await axios.put(
-        "https://besty-backend.vercel.app/api/store/follow",
-        {
-          id: currentUser.id,
-          storeId: storeData._id,
-        },
-        { withCredentials: true }
-      );
-      router.refresh()
+      await axios.put("https://besty-backend.vercel.app/api/store/follow", {
+        id: currentUser.id,
+        storeId: storeData._id,
+      });
+      router.refresh();
     } catch (error) {
       console.error("Error following store", error);
       setIsFollowing(false); // Revert the state if request fails
@@ -175,21 +171,17 @@ function SingleStoreClientSideComponent({ storeData }) {
   const HandleSubmitUnFollow = async () => {
     setIsFollowing(false);
     try {
-      await axios.put(
-        "https://besty-backend.vercel.app/api/store/unfollow",
-        {
-          id: currentUser.id,
-          storeId: storeData._id,
-        },
-        { withCredentials: true }
-      );
-      router.refresh()
+      await axios.put("https://besty-backend.vercel.app/api/store/unfollow", {
+        id: currentUser.id,
+        storeId: storeData._id,
+      });
+      router.refresh();
     } catch (error) {
       console.error("Error unfollowing store", error);
       setIsFollowing(true); // Revert the state if request fails
     }
   };
-  
+
   return (
     <div>
       <div className="flex justify-between space-x-10">
