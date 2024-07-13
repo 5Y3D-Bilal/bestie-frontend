@@ -36,7 +36,7 @@ function Login() {
       const response = await axios.post(
         "https://besty-backend.vercel.app/api/login",
         values,
-        { withCredentials: true }
+       
       );
       router.push("/");
     } catch (err) {

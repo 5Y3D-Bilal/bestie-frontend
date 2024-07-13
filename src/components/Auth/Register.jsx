@@ -61,10 +61,7 @@ function Register() {
       setErrors([]);
       const response = await axios.post(
         "https://besty-backend.vercel.app/api/register",
-        values,
-        {
-          withCredentials: true,
-        }
+        values
       );
       ChangeSetAuthModleType("login");
     } catch (err) {
