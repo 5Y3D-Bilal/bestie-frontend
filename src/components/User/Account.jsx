@@ -53,7 +53,7 @@ function Account({ UserData }) {
 
   const UploadBanner = async () => {
     const res = await axios.put(
-      `http://localhost:4000/api/user/${UserData.userId}`,
+      `https://besty-backend.vercel.app/api/user/${UserData.userId}`,
       { profileBanner: values.profileBanner },
       {
         withCredentials: true,
@@ -66,7 +66,7 @@ function Account({ UserData }) {
   const handleDeleteAccount = async (e) => {
     e.preventDefault();
     const res = await axios.post(
-      `http://localhost:4000/api/deleteAccount/${UserData.userId}`,
+      `https://besty-backend.vercel.app/api/deleteAccount/${UserData.userId}`,
       {
         email: values.email,
         password: values.password,
