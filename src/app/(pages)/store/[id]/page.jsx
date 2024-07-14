@@ -6,7 +6,12 @@ import Footer from "@/components/Footer";
 // SSR RENDERING FOR GETTING STORE DATA
 async function getStoreData(id) {
   try {
-    const res = await axios.get(`https://besty-backend.vercel.app/api/store/${id}`);
+    const res = await axios.get(
+      `https://besty-backend.vercel.app/api/store/${id}`,
+      {
+        withCredentials: true,
+      }
+    );
     return res.data;
   } catch (error) {
     console.error("Error fetching store data:", error);
@@ -20,7 +25,7 @@ export default async function StorePage({ params }) {
   if (!storeData) {
     return <div>Store not found</div>;
   }
-  
+
   return (
     <div>
       <Navbar />

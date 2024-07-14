@@ -6,22 +6,28 @@ import axios from "axios";
 
 // SSR RENDERING FOR GETTING ALL STORES
 const getAllStores = async () => {
-  const res = await axios
-    .get(`https://besty-backend.vercel.app/api/stores`)
-    .then((res) => {
-      return res.data;
+  try {
+    const res = await axios.get("https://besty-backend.vercel.app/api/stores", {
+      withCredentials: true,
     });
-  return res;
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching stores:", error);
+    throw error;
+  }
 };
 
 // SSR RENDERING FOR GETTING ALL STORES
 const getAllVerifiedStores = async () => {
-  const res = await axios
-    .get(`https://besty-backend.vercel.app/api/stores/verified`)
-    .then((res) => {
-      return res.data;
+  try {
+    const res = await axios.get('https://besty-backend.vercel.app/api/stores/verified', {
+      withCredentials: true,
     });
-  return res;
+    return res.data;
+  } catch (error) {
+    console.error('Error fetching stores:', error);
+    throw error;
+  }
 };
 
 async function Stores() {
