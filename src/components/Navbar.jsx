@@ -6,15 +6,22 @@ import Link from "next/link";
 import axios from "axios";
 import { usePathname } from "next/navigation";
 
+const jwtToken = localStorage.getItem('token');
+
 const getCurrentUser = async () => {
   try {
-    const res = await axios.get("https://besty-backend.vercel.app/api/currentuser", {
-      withCredentials: true,
+    const response = await axios.get('https://besty-backend.vercel.app/api/currentuser', {
+      headers: {
+        Authorization: `Bearer ${jwtToken}`,
+      },
     });
-    return res.data?.currentUser;
+
+    const currentUser = response.data;
+    console.log('Current user:', currentUser);
+    return currentUser;
   } catch (error) {
-    console.error("Error fetching current user", error);
-    return null;
+    console.error('Failed to fetch current user:', error);
+    throw error;
   }
 };
 
