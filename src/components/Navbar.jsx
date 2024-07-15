@@ -6,9 +6,9 @@ import Link from "next/link";
 import axios from "axios";
 import { usePathname } from "next/navigation";
 
-const jwtToken = localStorage.getItem('token');
 
 const getCurrentUser = async () => {
+  const jwtToken = localStorage.getItem('token');
   try {
     const response = await axios.get('https://besty-backend.vercel.app/api/currentuser', {
       headers: {
