@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 
 const getCurrentUser = async () => {
   try {
-    const res = await axios.get("https://bestie-frontend.vercel.app/api/currentuser", {
+    const res = await axios.get("https://besty-backend.vercel.app/api/currentuser", {
       withCredentials: true,
     });
     return res.data.currentUser;
