@@ -246,11 +246,10 @@ function SingleStoreClientSideComponent({ storeData }) {
                   }
                 >
                   <button
-                    className={`w-28 h-12 ${
-                      isFollowing
+                    className={`w-28 h-12 ${isFollowing
                         ? "bg-white text-[#333]"
                         : "bg-[#9748FF] text-white"
-                    } cursor-pointer rounded-3xl font-medium border-2 border-[#9748FF] shadow-[inset_0px_-2px_0px_1px_#9748FF] transition duration-300 ease-in-out`}
+                      } cursor-pointer rounded-3xl font-medium border-2 border-[#9748FF] shadow-[inset_0px_-2px_0px_1px_#9748FF] transition duration-300 ease-in-out`}
                   >
                     {isFollowing ? "Following" : "Follow"}
                   </button>

@@ -7,7 +7,7 @@ import { VscVerifiedFilled } from "react-icons/vsc";
 
 const getCurrentUser = async () => {
   try {
-    const res = await axios.get("https://besty-backend.vercel.app/api/currentuser",{ withCredentials: true });
+    const res = await axios.get("https://besty-backend.vercel.app/api/currentuser", { withCredentials: true });
     return res.data?.currentUser;
   } catch (error) {
     console.error("Error fetching current user", error);
@@ -19,7 +19,7 @@ const getFollowedStores = async (followedStores) => {
   try {
     const res = await axios.post(
       "https://besty-backend.vercel.app/api/store/getfollowedstore",
-      { storeIds: followedStores },{ withCredentials: true }
+      { storeIds: followedStores }, { withCredentials: true }
     );
     return res.data;
   } catch (error) {
