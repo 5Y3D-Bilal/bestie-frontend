@@ -11,7 +11,7 @@ const getCurrentUser = async () => {
     const res = await axios.get("https://besty-backend.vercel.app/api/currentuser", {
       withCredentials: true,
     });
-    return res.data.currentUser;
+    return res.data?.currentUser;
   } catch (error) {
     console.error("Error fetching current user", error);
     return null;
