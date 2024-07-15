@@ -34,10 +34,13 @@ function Login() {
     try {
       setErrors([]);
       const response = await axios.post(
-        "https://besty-backend.vercel.app/api/login",
+        "https://bestie-frontend.vercel.app/api/login",
         values,
-        { withCredentials: true }
+        {
+          withCredentials: true
+        }
       );
+      console.log(response)
       router.push("/");
     } catch (err) {
       if (err.response && err.response.data && err.response.data.errors) {

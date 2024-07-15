@@ -8,11 +8,10 @@ import { usePathname } from "next/navigation";
 
 const getCurrentUser = async () => {
   try {
-    const res = await axios.get(
-      "https://besty-backend.vercel.app/api/currentuser",
-      { withCredentials: true }
-    );
-    return res.data?.currentUser;
+    const res = await axios.get("https://bestie-frontend.vercel.app/api/currentuser", {
+      withCredentials: true,
+    });
+    return res.data.currentUser;
   } catch (error) {
     console.error("Error fetching current user", error);
     return null;
@@ -29,6 +28,7 @@ function Navbar() {
   useEffect(() => {
     const fetchCurrentUser = async () => {
       const user = await getCurrentUser();
+      console.log(user)
       setCurrentUser(user);
     };
 
@@ -64,9 +64,8 @@ function Navbar() {
                     return (
                       <Link
                         key={item.name}
-                        className={`cursor-pointer ${
-                          isActive && "text-[#9748FF]"
-                        } font-semibold leading-4`}
+                        className={`cursor-pointer ${isActive && "text-[#9748FF]"
+                          } font-semibold leading-4`}
                         href={item.href}
                       >
                         {item.name}
