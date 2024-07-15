@@ -14,28 +14,30 @@ function HomePageAllCategories() {
       image:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThHiBxLLWYPZkqneG6dGYpINn4cpPvm8st5w&s",
     },
-    {
-      id: 2,
-      name: "Honda Accord",
-      price: "7,500,000",
-      description: "A spacious and comfortable family car.",
-      city: "San Francisco",
-      date: "2022",
-      image:
-        "https://cache4.pakwheels.com/ad_pictures/9095/honda-accord-1-5l-vtec-turbo-2020-90955316.webp",
-    },
-    {
-      id: 3,
-      name: "Tesla Model 3",
-      price: "33,500,000",
-      description: "A stylish and high-performance electric car.",
-      city: "New York",
-      date: "2023",
-      image:
-        "https://cache4.pakwheels.com/ad_pictures/9788/tn_tesla-model-3-standard-range-plus-2021-97885495.webp",
-    },
+
     {
       id: 4,
+      name: "Audi A4",
+      price: "16,200,000",
+      description: "A stylish and technologically advanced sedan.",
+      city: "Phoenix",
+      date: "2024-07-03",
+      image:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9hGC_bpmW0eqt5X6jCZ7cDmZ7Vw2WArXcwg&s",
+    },
+    {
+      id: 13,
+      name: "Toyota Camry",
+      price: "12,500,000",
+      description: "A reliable and fuel-efficient sedan.",
+      city: "Los Angeles",
+      date: "2021",
+      image:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThHiBxLLWYPZkqneG6dGYpINn4cpPvm8st5w&s",
+    },
+
+    {
+      id: 44,
       name: "Audi A4",
       price: "16,200,000",
       description: "A stylish and technologically advanced sedan.",
