@@ -53,7 +53,7 @@ function Account({ UserData }) {
 
   const UploadBanner = async () => {
     const res = await axios.put(
-      `https://besty-backend.vercel.app/api/user/${UserData.userId}`,
+      `http://localhost:4000/api/user/${UserData.userId}`,
       { profileBanner: values.profileBanner },
       {
         withCredentials: true,
@@ -65,8 +65,9 @@ function Account({ UserData }) {
 
   const handleDeleteAccount = async (e) => {
     e.preventDefault();
-    const res = await axios.post(
-      `https://besty-backend.vercel.app/api/deleteAccount/${UserData.userId}`,
+    localStorage.removeItem("token")
+    const response = await axios.post(
+      `http://localhost:4000/api/deleteAccount/${UserData.userId}`,
       {
         email: values.email,
         password: values.password,
@@ -75,6 +76,11 @@ function Account({ UserData }) {
         withCredentials: true,
       }
     );
+    console.log(values.password)
+    const { token } = response.data; // Assuming your backend returns a token upon successful login
+
+    // Store the token securely (e.g., in localStorage or sessionStorage)
+    localStorage.setItem('token', token);
     router.push("/");
   };
 

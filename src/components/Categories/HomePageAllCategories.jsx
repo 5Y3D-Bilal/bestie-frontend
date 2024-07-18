@@ -127,6 +127,7 @@ function HomePageAllCategories() {
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="w-full rounded-t-md "
                       fill
+                      priority
                       style={{ objectFit: "cover" }}
                     />
                   </div>
@@ -170,6 +171,7 @@ function HomePageAllCategories() {
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="w-full rounded-t-md "
                       fill
+                      priority
                       style={{ objectFit: "cover" }}
                     />
                   </div>

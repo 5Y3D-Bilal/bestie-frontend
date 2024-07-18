@@ -11,17 +11,24 @@ import { IoSearchOutline } from "react-icons/io5";
 import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { FaLocationDot } from "react-icons/fa6";
+import { RiErrorWarningLine } from "react-icons/ri";
+import { IoCallOutline } from "react-icons/io5";
 
 const getCurrentUser = async () => {
+  const jwtToken = localStorage.getItem('token');
   try {
-    const res = await axios.get(
-      "https://besty-backend.vercel.app/api/currentuser",
-      { withCredentials: true }
-    );
-    return res.data?.currentUser;
+    const response = await axios.get('http://localhost:4000/api/currentuser', {
+      headers: {
+        Authorization: `Bearer ${jwtToken}`,
+      },
+    });
+
+    const currentUser = response.data;
+    return currentUser;
   } catch (error) {
-    console.error("Error fetching current user", error);
-    return null;
+    console.error('Failed to fetch current user:', error);
+    throw error;
   }
 };
 
@@ -158,14 +165,18 @@ function SingleStoreClientSideComponent({ storeData }) {
   const HandleSubmitFollow = async () => {
     setIsFollowing(true);
     try {
-      await axios.put(
-        "https://besty-backend.vercel.app/api/store/follow",
+      const response = await axios.put(
+        "http://localhost:4000/api/store/follow",
         {
           id: currentUser.id,
           storeId: storeData._id,
         },
         { withCredentials: true }
       );
+      const { token } = response.data; // Assuming your backend returns a token upon successful login
+
+      // Store the token securely (e.g., in localStorage or sessionStorage)
+      localStorage.setItem('token', token);
       router.refresh();
     } catch (error) {
       console.error("Error following store", error);
@@ -176,14 +187,18 @@ function SingleStoreClientSideComponent({ storeData }) {
   const HandleSubmitUnFollow = async () => {
     setIsFollowing(false);
     try {
-      await axios.put(
-        "https://besty-backend.vercel.app/api/store/unfollow",
+      const response = await axios.put(
+        "http://localhost:4000/api/store/unfollow",
         {
           id: currentUser.id,
           storeId: storeData._id,
         },
         { withCredentials: true }
       );
+      const { token } = response.data; // Assuming your backend returns a token upon successful login
+
+      // Store the token securely (e.g., in localStorage or sessionStorage)
+      localStorage.setItem('token', token);
       router.refresh();
     } catch (error) {
       console.error("Error unfollowing store", error);
@@ -247,8 +262,8 @@ function SingleStoreClientSideComponent({ storeData }) {
                 >
                   <button
                     className={`w-28 h-12 ${isFollowing
-                        ? "bg-white text-[#333]"
-                        : "bg-[#9748FF] text-white"
+                      ? "bg-white text-[#333]"
+                      : "bg-[#9748FF] text-white"
                       } cursor-pointer rounded-3xl font-medium border-2 border-[#9748FF] shadow-[inset_0px_-2px_0px_1px_#9748FF] transition duration-300 ease-in-out`}
                   >
                     {isFollowing ? "Following" : "Follow"}
@@ -329,7 +344,44 @@ function SingleStoreClientSideComponent({ storeData }) {
             </div>
           </div>
         </div>
-        <div className="w-1/3 lg:block hidden"></div>
+        <div className="w-1/3 lg:block hidden">
+          <div className="flex flex-col space-y-5">
+            <div className="flex rounded-lg flex-col border-[0.5px] border-gray-300 py-5 px-6">
+              <h2 className="text-gray-800 font-bold text-xl">Contact Seller</h2>
+              <div className="text-sm mt-2 bg-[#9748FF] flex items-center text-white py-4 cursor-pointer hover:border-[#9748FF] hover:border-[0.5px] animate-pulse hover:animate-none hover:bg-white duration-200 hover:text-black px-4 rounded-lg space-x-2">
+                <IoCallOutline size={25} /> <span className="text-[17px]"> Show Phone Number</span>
+              </div>
+            </div>
+            <div className="flex rounded-lg flex-col border-[0.5px] border-gray-300 py-5 px-6">
+              <h2 className="text-gray-800 font-bold text-xl">About Store</h2>
+              <h5 className="text-gray-700 text-sm mt-2 flex space-x-2">
+                <div>
+                  <RiErrorWarningLine />
+                </div>
+                <span className="">{storeData?.storeDescription}</span>
+              </h5>
+            </div>
+            <div className="flex rounded-lg flex-col border-[0.5px] border-gray-300 py-5 px-6">
+              <h2 className="text-gray-800 font-bold text-xl">Location</h2>
+              <h5 className="text-gray-700 text-sm mt-2 flex space-x-2 items-center w-full">
+                <FaLocationDot /> <span>{storeData.sellerAddress}</span>
+              </h5>
+            </div>
+
+            <div className="flex rounded-lg flex-col border-[0.5px] border-gray-300 py-5 px-6">
+              <h2 className="text-gray-800 font-bold text-xl">Safety Tips for Buyers</h2>
+              <h5 className="text-gray-700 text-sm mt-5">
+                <ul className="flex flex-col space-y-2 list-disc ml-3.5">
+                  <li>Meet seller at a public place</li>
+                  <li>Check The item before you buy
+                  </li>
+                  <li>Pay only after collecting The item
+                  </li>
+                </ul>
+              </h5>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

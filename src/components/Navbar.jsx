@@ -4,28 +4,27 @@ import Image from "next/image";
 import logo from "../../public/logo.png";
 import Link from "next/link";
 import axios from "axios";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 
 const getCurrentUser = async () => {
   const jwtToken = localStorage.getItem('token');
   try {
-    const response = await axios.get('https://besty-backend.vercel.app/api/currentuser', {
+    const response = await axios.get('http://localhost:4000/api/currentuser', {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },
     });
 
-    const currentUser = response.data;
-    console.log('Current user:', currentUser);
+    const currentUser = response?.data;
     return currentUser;
   } catch (error) {
-    console.error('Failed to fetch current user:', error);
-    throw error;
+    console.error();
   }
 };
 
 function Navbar() {
+  const router = useRouter()
   const [settings, setSettings] = useState(false);
   const ToggleSettings = () => {
     setSettings(!settings);
@@ -35,7 +34,7 @@ function Navbar() {
   useEffect(() => {
     const fetchCurrentUser = async () => {
       const user = await getCurrentUser();
-      console.log(user)
+      router.refresh()
       setCurrentUser(user);
     };
 
@@ -125,7 +124,7 @@ function Navbar() {
                             </Link>
                             {currentUser?.storeId ? (
                               <Link
-                                href={`/`}
+                                href={`/store/${currentUser?.id}`}
                                 className="block px-4 py-2 text-sm text-gray-700"
                                 role="menuitem"
                                 tabIndex="-1"

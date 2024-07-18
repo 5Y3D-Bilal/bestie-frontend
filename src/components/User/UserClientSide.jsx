@@ -18,16 +18,17 @@ function UserClientSide({ userData }) {
   };
 
   const logout = async () => {
+    localStorage.removeItem("token")
     try {
-      const res = await axios.post("http://localhost:4000/api/logout", {},{
+      const res = await axios.post("http://localhost:4000/api/logout", {}, {
         withCredentials: true,
       });
-    router.push('/')
+      router.push('/')
     } catch (error) {
       console.log(error)
     }
   };
-  
+
   return (
     <div className="flex">
       {/* Side bar */}
@@ -38,45 +39,45 @@ function UserClientSide({ userData }) {
               <ul className="mt-5 space-y-4">
                 <li
                   className="text-[18px] hover:translate-x-2 duration-500 cursor-pointer"
-                  // onClick={() => ChangeAdminModelState("accountSettings")}
+                // onClick={() => ChangeAdminModelState("accountSettings")}
                 >
                   Account Settings
                 </li>
                 <li
                   className="text-[18px] hover:translate-x-2 duration-500 cursor-pointer"
-                  // onClick={() => ChangeAdminModelState("staffPanal")}
+                // onClick={() => ChangeAdminModelState("staffPanal")}
                 >
                   Staff Panal
                 </li>
                 <li
                   className="text-[18px] hover:translate-x-2 duration-500 cursor-pointer"
-                  // onClick={() => ChangeAdminModelState("getAllUser")}
+                // onClick={() => ChangeAdminModelState("getAllUser")}
                 >
                   Get All Users
                 </li>
                 <li
                   className="text-[18px] hover:translate-x-2 duration-500 cursor-pointer"
-                  // onClick={() => ChangeAdminModelState("getAllEnrollements")}
+                // onClick={() => ChangeAdminModelState("getAllEnrollements")}
                 >
                   Get All Enrollements
                 </li>
                 <li
                   className="text-[18px] hover:translate-x-2 duration-500 cursor-pointer"
-                  // onClick={() => ChangeAdminModelState("getAllFAQ")}
+                // onClick={() => ChangeAdminModelState("getAllFAQ")}
                 >
                   Get All FAQS
                 </li>
                 <li
                   className="text-[18px] hover:translate-x-2 duration-500 cursor-pointer"
-                  // onClick={() => ChangeAdminModelState("MakeCourse")}
+                // onClick={() => ChangeAdminModelState("MakeCourse")}
                 >
                   Make A Course
                 </li>
                 <li
                   className="text-[18px] hover:translate-x-2 duration-500 cursor-pointer"
-                  // onClick={() =>
-                  //   ChangeAdminModelState("Youtube_testimonials")
-                  // }
+                // onClick={() =>
+                //   ChangeAdminModelState("Youtube_testimonials")
+                // }
                 >
                   Add Youtube Video
                 </li>

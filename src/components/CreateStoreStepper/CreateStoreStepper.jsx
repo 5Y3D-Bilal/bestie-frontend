@@ -47,11 +47,15 @@ const Stepper = ({ userId }) => {
 
   const completeStoreCreattion = async () => {
     try {
-      const res = await axios.post(
-        "https://besty-backend.vercel.app/api/store/create",
+      const response = await axios.post(
+        "http://localhost:4000/api/store/create",
         values,
         { withCredentials: true }
       );
+      const { token } = response.data; // Assuming your backend returns a token upon successful login
+
+      // Store the token securely (e.g., in localStorage or sessionStorage)
+      localStorage.setItem('token', token);
       router.push("/");
       router.refresh();
     } catch (err) {

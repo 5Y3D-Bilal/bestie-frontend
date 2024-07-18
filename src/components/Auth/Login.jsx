@@ -32,7 +32,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://besty-backend.vercel.app/api/login', {
+      const response = await axios.post('http://localhost:4000/api/login', {
         email: values.email,
         password: values.password,
       });
@@ -42,10 +42,7 @@ function Login() {
       // Store the token securely (e.g., in localStorage or sessionStorage)
       localStorage.setItem('token', token);
 
-      // Optionally, decode the token to get user information if needed
-      const decodedToken = jwt_decode(token);
-      console.log(decodedToken);
-
+      router.push('/')
       return token;
     } catch (err) {
       if (err.response && err.response.data && err.response.data.errors) {
