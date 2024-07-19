@@ -8,9 +8,9 @@ import { RxText } from "react-icons/rx";
 import { VscVerifiedFilled } from "react-icons/vsc";
 
 const getCurrentUser = async () => {
-  const jwtToken = localStorage.getItem('token');
+  const jwtToken = localStorage.getItem("token");
   try {
-    const response = await axios.get('http://localhost:4000/api/currentuser', {
+    const response = await axios.get("http://localhost:4000/api/currentuser", {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },
@@ -19,7 +19,7 @@ const getCurrentUser = async () => {
     const currentUser = response.data;
     return currentUser;
   } catch (error) {
-    console.error('Failed to fetch current user:', error);
+    console.error("Failed to fetch current user:", error);
     throw error;
   }
 };
@@ -28,7 +28,8 @@ const getFollowedStores = async (followedStores) => {
   try {
     const res = await axios.post(
       "http://localhost:4000/api/store/getfollowedstore",
-      { storeIds: followedStores }, { withCredentials: true }
+      { storeIds: followedStores },
+      { withCredentials: true }
     );
     return res.data;
   } catch (error) {
@@ -40,6 +41,7 @@ const getFollowedStores = async (followedStores) => {
 function StoreClientSideComponent({ storesData, verifiedStores }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [followedStoresData, setFollowedStoresData] = useState([]);
+  const [visibleStores, setVisibleStores] = useState(4); // Add this state to control the number of visible stores
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -55,20 +57,6 @@ function StoreClientSideComponent({ storesData, verifiedStores }) {
   }, []);
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState(storesData);
-
-  const searchQueryFunction = (e) => {
-    e.preventDefault();
-
-    function searchByName(name) {
-      return storesData.filter((product) =>
-        product.storeDescription.toLowerCase().includes(name.toLowerCase())
-      );
-    }
-
-    const results = searchByName(searchTerm);
-    setResults(results);
-  };
-
   const sellerCity = [
     "Lahore",
     "Faisalabad",
@@ -207,14 +195,61 @@ function StoreClientSideComponent({ storesData, verifiedStores }) {
   const Categories = ["Shop", "ShowRoom", "WholeSaler", "Distributor"];
 
   const [values, setValues] = useState({
-    fillterCity: sellerCity,
-    fillterCategories: Categories
-  })
+    fillterCity: "",
+    fillterCategories: "",
+  });
 
+  // Searching for stores
+  const searchQueryFunction = (e) => {
+    e.preventDefault();
+
+    function searchByName(name) {
+      return storesData.filter((product) =>
+        product.storeDescription.toLowerCase().includes(name.toLowerCase())
+      );
+    }
+
+    const results = searchByName(searchTerm);
+    setResults(results);
+  };
+
+  // Filtering StoreData
+  useEffect(() => {
+    const filterStores = () => {
+      let filtered = storesData;
+      if (values.fillterCity) {
+        if (values.fillterCity === "All Cities") {
+          filtered = storesData;
+        } else {
+          filtered = filtered.filter(
+            (store) => store.sellerCity === values.fillterCity
+          );
+        }
+      }
+      if (values.fillterCategories) {
+        if (values.fillterCategories === "All Categories") {
+          filtered = storesData;
+        } else {
+          filtered = filtered.filter(
+            (store) => store.storeCategories === values.fillterCategories
+          );
+        }
+        console.log(values.fillterCategories);
+      }
+      setResults(filtered);
+    };
+    filterStores();
+  }, [values, storesData]);
+
+  // Function to load more stores
+  const loadMoreStores = () => {
+    setVisibleStores((prev) => prev + 4);
+  };
 
   return (
     <div className="max-w-6xl mx-auto mt-[7.5rem]">
       <div className="bg-white z-50 py-5 mb-2 space-x-3 flex px-10 justify-between sticky top-[110px] overflow-x-auto overflow-y-hidden ">
+        {/* Cities Filter */}
         <div className="w-1/4">
           <form className="w-full mx-auto">
             <select
@@ -233,6 +268,7 @@ function StoreClientSideComponent({ storesData, verifiedStores }) {
             </select>
           </form>
         </div>
+        {/* Cities Categories */}
         <div className="w-1/4">
           <form className="w-full mx-auto">
             <select
@@ -243,21 +279,29 @@ function StoreClientSideComponent({ storesData, verifiedStores }) {
               className="bg-white border appearance-none border-white text-gray-900 py-[0.6rem] px-5 text-sm rounded-md  block w-full p-2.5  dark:border-gray-300"
             >
               <option>All Categories</option>
-              <div>
-                e
-              </div>
               {Categories.map((i) => (
                 <option value={i} key={i}>
                   {i}
                 </option>
               ))}
             </select>
-          </form></div>
+          </form>
+        </div>
+        {/* Search for Stores */}
         <div className="w-1/2">
           <div className="flex items-center rounded-md bg-white py-2 px-3 border-[0.5px] border-gray-300">
             <RxText />
-            <form action="" className="flex w-full" onSubmit={searchQueryFunction}>
-              <input onChange={(e) => setSearchTerm(e.target.value)} placeholder="Enter Keywords here...." type="text" className="w-full bg-transparent outline-none px-2" />
+            <form
+              action=""
+              className="flex w-full"
+              onSubmit={searchQueryFunction}
+            >
+              <input
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Enter Keywords here...."
+                type="text"
+                className="w-full bg-transparent outline-none px-2"
+              />
               <button>Search</button>
             </form>
           </div>
@@ -267,6 +311,7 @@ function StoreClientSideComponent({ storesData, verifiedStores }) {
         className="flex space-x-5
       "
       >
+        {/* Followed Stores */}
         <div className="w-[22%] sticky top-[210px] overflow-x-auto overflow-y-hidden h-[100%] mb-10">
           <div className="border-[0.5px] border-gray-300 py-4 px-5 rounded-lg">
             <span className="text-[20px] text-gray-900 font-semibold">
@@ -277,7 +322,7 @@ function StoreClientSideComponent({ storesData, verifiedStores }) {
             {followedStoresData.map((item) => (
               <div
                 className="border-gray-300 py-3 px-2 justify-between rounded-lg flex items-center space-x-2 border-[0.5px]"
-                key={item.id}
+                key={item._id}
               >
                 <div className="flex items-center space-x-2">
                   <Link href={`/profile/${item._id}`}>
@@ -300,41 +345,55 @@ function StoreClientSideComponent({ storesData, verifiedStores }) {
             ))}
           </div>
         </div>
-        <div className="grid lg:grid-cols-2 w-1/2 mb-10 gap-y-3">
-          {results.map((item) => (
-            <div
-              className="border-gray-400 border-[0.5px] w-full lg:w-[280px] rounded-md "
-              key={item.id}
-            >
-              <Link href={`/profile/${item._id}`}>
-                <div className="relative w-full h-[240px]">
-                  <Image
-                    src={item.storeLogo}
-                    alt={item.storeName}
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="w-full rounded-t-md"
-                    fill
-                    style={{ objectFit: "cover" }}
-                  />
-                </div>
-              </Link>
-              <div className="p-3">
-                <div>
-                  <h2 className="text-gray-900 mt-1 text-[24px] font-semibold">
-                    {item.storeName}
-                  </h2>
-                  <p className="truncate text-[18px] mt-3">
-                    {item.storeDescription}
-                  </p>
-                </div>
-                <div className="pb-2 pt-2 flex justify-between">
-                  <h1 className="text-gray-800">{item.sellerCity}</h1>
-                  <h2 className="text-gray-800">{item.storeCategories}</h2>
+        {/* All Stores */}
+        <div className="w-1/2 mb-10">
+          <div className="grid lg:grid-cols-2 mb-5 gap-y-3">
+            {results.slice(0, visibleStores).map((item) => (
+              <div
+                className="border-gray-400 border-[0.5px] w-full lg:w-[280px] rounded-md "
+                key={item._id}
+              >
+                <Link href={`/profile/${item._id}`}>
+                  <div className="relative w-full h-[240px]">
+                    <Image
+                      src={item.storeLogo}
+                      alt={item.storeName}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="w-full rounded-t-md"
+                      fill
+                      style={{ objectFit: "cover" }}
+                    />
+                  </div>
+                </Link>
+                <div className="p-3">
+                  <div>
+                    <h2 className="text-gray-900 mt-1 text-[24px] font-semibold">
+                      {item.storeName}
+                    </h2>
+                    <p className="truncate text-[18px] mt-3">
+                      {item.storeDescription}
+                    </p>
+                  </div>
+                  <div className="pb-2 pt-2 flex justify-between">
+                    <h1 className="text-gray-800">{item.sellerCity}</h1>
+                    <h2 className="text-gray-800">{item.storeCategories}</h2>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          <div className="w-full flex justify-center">
+            <button
+              onClick={loadMoreStores}
+              className="w-32 h-12 bg-white cursor-pointer rounded-3xl border-2 border-[#9748FF] shadow-[inset_0px_-2px_0px_1px_#9748FF] group hover:bg-[#9748FF] transition duration-300 ease-in-out"
+            >
+              <span className="font-medium text-[#333] group-hover:text-white">
+                Load More
+              </span>
+            </button>
+          </div>
         </div>
+        {/* Verified Stores */}
         <div className="w-[25%] sticky top-[210px] overflow-x-auto overflow-y-hidden h-[100%] mb-10">
           <div className="border-[0.5px] border-gray-300 py-4 px-5 rounded-lg">
             <span className="text-[20px] text-gray-900 font-semibold">
@@ -345,7 +404,7 @@ function StoreClientSideComponent({ storesData, verifiedStores }) {
             {verifiedStores.map((item) => (
               <div
                 className="border-gray-300 py-3 px-2 justify-between rounded-lg flex items-center space-x-2 border-[0.5px]"
-                key={item.id}
+                key={item._id}
               >
                 <div className="flex items-center space-x-2">
                   <div className="flex items-center space-x-2">
