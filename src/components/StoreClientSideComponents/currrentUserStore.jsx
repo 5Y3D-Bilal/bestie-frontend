@@ -1,18 +1,24 @@
-"use client"
-import moment from 'moment';
-import Image from 'next/image';
-import Link from 'next/link';
-import React, { useState } from 'react'
-import { AiFillLike } from 'react-icons/ai';
-import { FaLocationDot, FaShareNodes, FaStar } from 'react-icons/fa6';
-import { GrFormNextLink } from 'react-icons/gr';
-import { HiBuildingOffice2 } from 'react-icons/hi2';
-import { IoCallOutline, IoSearchOutline } from 'react-icons/io5';
-import { MdEdit } from 'react-icons/md';
-import { RiErrorWarningLine } from 'react-icons/ri';
+"use client";
+import moment from "moment";
+import Image from "next/image";
+import Link from "next/link";
+import React, { useState } from "react";
+import { AiFillLike } from "react-icons/ai";
+import { FaLocationDot, FaShareNodes, FaStar } from "react-icons/fa6";
+import { GrFormNextLink } from "react-icons/gr";
+import { HiBuildingOffice2 } from "react-icons/hi2";
+import { IoCallOutline, IoSearchOutline } from "react-icons/io5";
+import { MdEdit } from "react-icons/md";
+import { RiErrorWarningLine } from "react-icons/ri";
 import { HiDotsHorizontal } from "react-icons/hi";
+import { storage } from "@/Firebase/firebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import Loader from "../Loading/Loader";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 function CurrrentUserStore({ storeData }) {
+  const router = useRouter();
   const modileProducts = [
     {
       id: 1,
@@ -88,6 +94,11 @@ function CurrrentUserStore({ storeData }) {
         "Google Pixel 6 comes with a 6.4-inch display, Google Tensor processor, and advanced camera features.",
     },
   ];
+  const [values, setValues] = useState({
+    storeBanner: null,
+    password: "",
+    email: "",
+  });
   const [results, setResults] = useState(modileProducts);
   const [searchTerm, setSearchTerm] = useState("");
   const searchQueryFunction = (e) => {
@@ -103,29 +114,68 @@ function CurrrentUserStore({ storeData }) {
     setResults(results);
   };
 
+  const [openBannerImageUploader, setOpenBannerImageUploader] = useState(false);
+  const handleToggleBanner = () => {
+    setOpenBannerImageUploader((prevState) => !prevState);
+  };
+
+  const [pervViewImage, setPervViewImage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const handleFileChange = async (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setLoading(true);
+      const image = e.target.files[0];
+      let downloadURL = "";
+      const storageRef = ref(storage, `storeBannerImages/${image.name}`);
+      await uploadBytes(storageRef, image);
+      downloadURL = await getDownloadURL(storageRef);
+      setValues((prev) => ({ ...prev, storeBanner: downloadURL }));
+      setPervViewImage(downloadURL);
+      setLoading(false);
+    }
+  };
+
+  const UploadBanner = async () => {
+    const res = await axios.put(
+      `http://localhost:4000/api/store/${storeData.map((item) => item._id)}`,
+      { storeBanner: values.storeBanner },
+      {
+        withCredentials: true,
+      }
+    );
+    setOpenBannerImageUploader(false);
+    router.refresh();
+  };
   return (
-    <div className='w-full'>
-      <div className='max-w-6xl mx-auto m-32 mb-10'>
+    <div className="w-full">
+      <div className="max-w-6xl mx-auto m-32 mb-10">
         {storeData.map((item) => (
           <div key={item._id}>
             <div>
               <div className="flex justify-between space-x-10">
-                <div className="w-full">
+                <div className="w-full ">
                   <div className="w-full md:border-[0.5px] lg:border-[0.5px] border-gray-300 rounded-t-lg">
                     {item.storeBanner ? (
-                      <div className="relative w-full h-[340px]">
+                      <div className="relative w-[100%] h-[100px] lg:h-[300px]  flex justify-end items-end">
                         <Image
                           src={item.storeBanner}
                           alt={item.storeName}
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                          className="w-full lg:rounded-t-md"
                           fill
                           style={{ objectFit: "cover" }}
+                          className="rounded-t-lg"
+                          priority
+                        />
+                        <MdEdit
+                          onClick={handleToggleBanner}
+                          color="#9748FF"
+                          size={35}
+                          className="p-2 bg-white rounded-full m-6 cursor-pointer relative"
                         />
                       </div>
                     ) : (
                       <div className="w-full h-[350px] bg-[#9748FF] rounded-t-lg flex justify-end items-end">
                         <MdEdit
+                          onClick={handleToggleBanner}
                           color="#9748FF"
                           size={35}
                           className="p-2 bg-white rounded-full m-6 cursor-pointer relative"
@@ -155,7 +205,8 @@ function CurrrentUserStore({ storeData }) {
                               Published Ads {item.publishedProducts.length}
                             </h5>
                             <h5 className="text-[12px] text-gray-700">
-                              Member Since {moment(item.createdAt).format("MMMM YYYY")}
+                              Member Since{" "}
+                              {moment(item.createdAt).format("MMMM YYYY")}
                             </h5>
                             <div className="cursor-pointer text-[12px] text-gray-700">
                               {item.followers.length} Followers
@@ -166,7 +217,6 @@ function CurrrentUserStore({ storeData }) {
                             </div>
                           </div>
                         </div>
-
                       </div>
                       <div className="px-5 lg:px-10 lg:flex-row flex-col items-start flex lg:items-center space-y-3 lg:space-y-0 w-full lg:space-x-12">
                         <div className="flex w-full lg:w-1/2 justify-between items-center">
@@ -223,18 +273,27 @@ function CurrrentUserStore({ storeData }) {
                                   </div>
                                 </Link>
                                 <div className="p-3">
-                                  <div className='flex items-center justify-between'>
+                                  <div className="flex items-center justify-between">
                                     <h1 className="text-gray-900 font-extrabold text-[25px]">
                                       Rs {item.price}
                                     </h1>
-                                    <div className='h-[20px] w-[20px] flex items-center justify-center cursor-pointer rounded-full bg-[#9748FF]'>
-                                      <HiDotsHorizontal color='white' size={10} />
+                                    <div className="h-[20px] w-[20px] flex items-center justify-center cursor-pointer rounded-full bg-[#9748FF]">
+                                      <HiDotsHorizontal
+                                        color="white"
+                                        size={10}
+                                      />
                                     </div>
                                   </div>
-                                  <h2 className="text-gray-800 mt-1">{item.name}</h2>
+                                  <h2 className="text-gray-800 mt-1">
+                                    {item.name}
+                                  </h2>
                                   <div className="pb-3 pt-5 flex justify-between">
-                                    <h1 className="text-gray-800">{item.city}</h1>
-                                    <h2 className="text-gray-800">{item.date}</h2>
+                                    <h1 className="text-gray-800">
+                                      {item.city}
+                                    </h1>
+                                    <h2 className="text-gray-800">
+                                      {item.date}
+                                    </h2>
                                   </div>
                                 </div>
                               </div>
@@ -250,17 +309,23 @@ function CurrrentUserStore({ storeData }) {
                 <div className="w-1/3 lg:block hidden sticky h-[100vh] top-[140px]">
                   <div className="flex flex-col space-y-5">
                     <div className="flex rounded-lg flex-col border-[0.5px] border-gray-300 py-5 px-6">
-                      <h2 className="text-gray-800 font-bold text-xl">Contact Seller</h2>
+                      <h2 className="text-gray-800 font-bold text-xl">
+                        Contact Seller
+                      </h2>
                       <div className="text-sm mt-2 bg-[#9748FF] flex items-center text-white py-4 cursor-pointer hover:border-[#9748FF] hover:border-[0.5px] animate-pulse hover:animate-none hover:bg-white duration-200 hover:text-black px-4 rounded-lg space-x-2">
-                        <IoCallOutline size={25} /> <span className="text-[17px]"> Edit Phone Number</span>
+                        <IoCallOutline size={25} />{" "}
+                        <span className="text-[17px]"> Edit Phone Number</span>
                       </div>
                     </div>
                     <div className="flex rounded-lg flex-col border-[0.5px] border-gray-300 py-5 px-6">
-                      <h2 className="text-gray-800 font-bold text-xl flex items-center justify-between"><span>About Store</span> <MdEdit
-                        color="#9748FF"
-                        size={17}
-                        className=" rounded-full cursor-pointer relative"
-                      /></h2>
+                      <h2 className="text-gray-800 font-bold text-xl flex items-center justify-between">
+                        <span>About Store</span>{" "}
+                        <MdEdit
+                          color="#9748FF"
+                          size={17}
+                          className=" rounded-full cursor-pointer relative"
+                        />
+                      </h2>
                       <h5 className="text-gray-700 text-sm mt-2 flex space-x-2">
                         <div>
                           <RiErrorWarningLine />
@@ -269,11 +334,14 @@ function CurrrentUserStore({ storeData }) {
                       </h5>
                     </div>
                     <div className="flex rounded-lg flex-col border-[0.5px] border-gray-300 py-5 px-6">
-                      <h2 className="text-gray-800 font-bold text-xl flex items-center justify-between"><span>Location</span> <MdEdit
-                        color="#9748FF"
-                        size={17}
-                        className=" rounded-full cursor-pointer relative"
-                      /></h2>
+                      <h2 className="text-gray-800 font-bold text-xl flex items-center justify-between">
+                        <span>Location</span>{" "}
+                        <MdEdit
+                          color="#9748FF"
+                          size={17}
+                          className=" rounded-full cursor-pointer relative"
+                        />
+                      </h2>
                       <h5 className="text-gray-700 text-sm mt-2 flex space-x-2 items-center w-full">
                         <FaLocationDot /> <span>{item.sellerAddress}</span>
                       </h5>
@@ -285,8 +353,60 @@ function CurrrentUserStore({ storeData }) {
           </div>
         ))}
       </div>
+      {openBannerImageUploader && (
+        <div className="w-full h-screen fixed top-0  flex justify-center items-center">
+          <div
+            className="h-screen bg-black top-0 fixed w-full opacity-50"
+            onClick={() => setOpenBannerImageUploader(false)}
+          />
+          <div className="flex flex-col items-center bg-white justify-center mt-20 fixed w-1/2 h-[400px] z-20 py-10 rounded-md">
+            <h1 className="text-[20px] font-bold">Upload a banner</h1>
+            {loading ? (
+              <div className="bg-white rounded-md my-auto">
+                <Loader />
+              </div>
+            ) : pervViewImage && loading === false ? (
+              <>
+                <div className="relative w-[100px] h-[100px] my-16">
+                  <Image
+                    src={pervViewImage}
+                    alt="imgToBeUpload"
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    style={{ objectFit: "cover" }}
+                  />
+                </div>
+                <div className="mt-auto">
+                  <button
+                    onClick={UploadBanner}
+                    className="border-[1px] border-gray-400 py-2 px-20 rounded-md cursor-pointer"
+                  >
+                    Upload
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="mt-auto">
+                <input
+                  type="file"
+                  className="hidden"
+                  id="banner"
+                  onChange={handleFileChange}
+                  accept=".png, .jpg , .gif, .jpeg"
+                />
+                <label
+                  htmlFor="banner"
+                  className="border-[1px] border-gray-400 py-2 px-20 rounded-md cursor-pointer"
+                >
+                  Upload from computer
+                </label>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
-  )
+  );
 }
 
-export default CurrrentUserStore
+export default CurrrentUserStore;

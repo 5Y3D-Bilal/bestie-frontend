@@ -16,9 +16,9 @@ import { RiErrorWarningLine } from "react-icons/ri";
 import { IoCallOutline } from "react-icons/io5";
 
 const getCurrentUser = async () => {
-  const jwtToken = localStorage.getItem('token');
+  const jwtToken = localStorage.getItem("token");
   try {
-    const response = await axios.get('http://localhost:4000/api/currentuser', {
+    const response = await axios.get("http://localhost:4000/api/currentuser", {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },
@@ -27,7 +27,7 @@ const getCurrentUser = async () => {
     const currentUser = response.data;
     return currentUser;
   } catch (error) {
-    console.error('Failed to fetch current user:', error);
+    console.error("Failed to fetch current user:", error);
     throw error;
   }
 };
@@ -173,10 +173,7 @@ function SingleStoreClientSideComponent({ storeData }) {
         },
         { withCredentials: true }
       );
-      const { token } = response.data; // Assuming your backend returns a token upon successful login
 
-      // Store the token securely (e.g., in localStorage or sessionStorage)
-      localStorage.setItem('token', token);
       router.refresh();
     } catch (error) {
       console.error("Error following store", error);
@@ -195,10 +192,7 @@ function SingleStoreClientSideComponent({ storeData }) {
         },
         { withCredentials: true }
       );
-      const { token } = response.data; // Assuming your backend returns a token upon successful login
 
-      // Store the token securely (e.g., in localStorage or sessionStorage)
-      localStorage.setItem('token', token);
       router.refresh();
     } catch (error) {
       console.error("Error unfollowing store", error);
@@ -261,10 +255,11 @@ function SingleStoreClientSideComponent({ storeData }) {
                   }
                 >
                   <button
-                    className={`w-28 h-12 ${isFollowing
-                      ? "bg-white text-[#333]"
-                      : "bg-[#9748FF] text-white"
-                      } cursor-pointer rounded-3xl font-medium border-2 border-[#9748FF] shadow-[inset_0px_-2px_0px_1px_#9748FF] transition duration-300 ease-in-out`}
+                    className={`w-28 h-12 ${
+                      isFollowing
+                        ? "bg-white text-[#333]"
+                        : "bg-[#9748FF] text-white"
+                    } cursor-pointer rounded-3xl font-medium border-2 border-[#9748FF] shadow-[inset_0px_-2px_0px_1px_#9748FF] transition duration-300 ease-in-out`}
                   >
                     {isFollowing ? "Following" : "Follow"}
                   </button>
@@ -347,9 +342,12 @@ function SingleStoreClientSideComponent({ storeData }) {
         <div className="w-1/3 lg:block hidden">
           <div className="flex flex-col space-y-5">
             <div className="flex rounded-lg flex-col border-[0.5px] border-gray-300 py-5 px-6">
-              <h2 className="text-gray-800 font-bold text-xl">Contact Seller</h2>
+              <h2 className="text-gray-800 font-bold text-xl">
+                Contact Seller
+              </h2>
               <div className="text-sm mt-2 bg-[#9748FF] flex items-center text-white py-4 cursor-pointer hover:border-[#9748FF] hover:border-[0.5px] animate-pulse hover:animate-none hover:bg-white duration-200 hover:text-black px-4 rounded-lg space-x-2">
-                <IoCallOutline size={25} /> <span className="text-[17px]"> Show Phone Number</span>
+                <IoCallOutline size={25} />{" "}
+                <span className="text-[17px]"> Show Phone Number</span>
               </div>
             </div>
             <div className="flex rounded-lg flex-col border-[0.5px] border-gray-300 py-5 px-6">
@@ -369,14 +367,14 @@ function SingleStoreClientSideComponent({ storeData }) {
             </div>
 
             <div className="flex rounded-lg flex-col border-[0.5px] border-gray-300 py-5 px-6">
-              <h2 className="text-gray-800 font-bold text-xl">Safety Tips for Buyers</h2>
+              <h2 className="text-gray-800 font-bold text-xl">
+                Safety Tips for Buyers
+              </h2>
               <h5 className="text-gray-700 text-sm mt-5">
                 <ul className="flex flex-col space-y-2 list-disc ml-3.5">
                   <li>Meet seller at a public place</li>
-                  <li>Check The item before you buy
-                  </li>
-                  <li>Pay only after collecting The item
-                  </li>
+                  <li>Check The item before you buy</li>
+                  <li>Pay only after collecting The item</li>
                 </ul>
               </h5>
             </div>
