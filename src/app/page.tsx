@@ -1,5 +1,5 @@
 import Image from "next/image";
-import HomePageAllCategories from "./../components/Categories/HomePageAllCategories";
+import HomePageAllCategories from "../components/Categories/HomePageAllCategories";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 

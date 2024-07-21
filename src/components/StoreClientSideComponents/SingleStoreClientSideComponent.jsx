@@ -36,6 +36,7 @@ function SingleStoreClientSideComponent({ storeData }) {
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState(null);
   const [isFollowing, setIsFollowing] = useState(false);
+  const [liked, setLiked] = useState(false);
   useEffect(() => {
     const fetchCurrentUser = async () => {
       const user = await getCurrentUser();
@@ -200,6 +201,44 @@ function SingleStoreClientSideComponent({ storeData }) {
     }
   };
 
+  const HandleSubmitLike = async () => {
+    setLiked(true);
+    try {
+      const response = await axios.put(
+        "http://localhost:4000/api/store/like",
+        {
+          id: currentUser.id,
+          storeId: storeData._id,
+        },
+        { withCredentials: true }
+      );
+
+      router.refresh();
+    } catch (error) {
+      console.error("Error following store", error);
+      setLiked(false); // Revert the state if request fails
+    }
+  };
+
+  const HandleSubmitUnLike = async () => {
+    setLiked(false);
+    try {
+      const response = await axios.put(
+        "http://localhost:4000/api/store/unlike",
+        {
+          id: currentUser.id,
+          storeId: storeData._id,
+        },
+        { withCredentials: true }
+      );
+
+      router.refresh();
+    } catch (error) {
+      console.error("Error following store", error);
+      setLiked(true); // Revert the state if request fails
+    }
+  };
+
   return (
     <div>
       <div className="flex justify-between space-x-10">
@@ -267,8 +306,14 @@ function SingleStoreClientSideComponent({ storeData }) {
               </div>
               <div className="px-5 lg:px-10 lg:flex-row flex-col items-start flex lg:items-center space-y-3 lg:space-y-0 w-full lg:space-x-12">
                 <div className="flex w-full lg:w-1/2 justify-between items-center">
-                  <button className="flex bg-gray-100 rounded-full space-x-1 py-1 px-3 text-[12px] text-gray-800 items-center">
-                    <AiFillLike /> <span>{storeData.likes.length}</span>
+                  <button
+                    onClick={liked ? HandleSubmitUnLike : HandleSubmitLike}
+                    className={`flex ${
+                      liked ? "bg-[#9748FF] text-white" : "bg-gray-100 text-gray-800"
+                    } rounded-full space-x-1 py-1 px-3 text-[12px]  items-center`}
+                  >
+                    <AiFillLike />
+                    <span>{storeData.likes.length}</span>
                   </button>
                   <button className="flex bg-gray-100 rounded-full space-x-1 py-1 px-3 text-[12px] text-gray-800 items-center">
                     <FaShareNodes /> <span>Share</span>
@@ -304,7 +349,7 @@ function SingleStoreClientSideComponent({ storeData }) {
                   <>
                     {results.map((item) => (
                       <div
-                        className="border-gray-400 border-[0.5px] w-full lg:w-[240px] rounded-md "
+                        className="border-gray-400 border-[0.5px] w-full lg:w-[230px] rounded-md "
                         key={item.id}
                       >
                         <Link href={`/item/${item.id}`}>

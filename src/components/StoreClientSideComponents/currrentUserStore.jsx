@@ -16,6 +16,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import Loader from "../Loading/Loader";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { MdOutlineDone } from "react-icons/md";
 
 function CurrrentUserStore({ storeData }) {
   const router = useRouter();
@@ -98,6 +99,9 @@ function CurrrentUserStore({ storeData }) {
     storeBanner: null,
     password: "",
     email: "",
+    storeName: "",
+    storeDescription: "",
+    sellerAddress: "",
   });
   const [results, setResults] = useState(modileProducts);
   const [searchTerm, setSearchTerm] = useState("");
@@ -119,6 +123,20 @@ function CurrrentUserStore({ storeData }) {
     setOpenBannerImageUploader((prevState) => !prevState);
   };
 
+  const [openStoreDescription, setOpenStoreDescription] = useState(false);
+  const handleToggleStoreDescription = () => {
+    setOpenStoreDescription((prevState) => !prevState);
+  };
+
+  const [openStoreLocation, setOpenStoreLocation] = useState(false);
+  const handleToggleStoreLocation = () => {
+    setOpenStoreLocation((prevState) => !prevState);
+  };
+
+  const [storeName, setStoreName] = useState(false);
+  const handleToggleStoreName = () => {
+    setStoreName((prevState) => !prevState);
+  };
   const [pervViewImage, setPervViewImage] = useState("");
   const [loading, setLoading] = useState(false);
   const handleFileChange = async (e) => {
@@ -137,13 +155,56 @@ function CurrrentUserStore({ storeData }) {
 
   const UploadBanner = async () => {
     const res = await axios.put(
-      `http://localhost:4000/api/store/${storeData.map((item) => item._id)}`,
+      `http://localhost:4000/api/store/updateStoreBanner/${storeData.map(
+        (item) => item._id
+      )}`,
       { storeBanner: values.storeBanner },
       {
         withCredentials: true,
       }
     );
     setOpenBannerImageUploader(false);
+    router.refresh();
+  };
+
+  const UpdateStoreName = async () => {
+    const res = await axios.put(
+      `http://localhost:4000/api/store/updateStoreName/${storeData.map(
+        (item) => item._id
+      )}`,
+      { storeName: values.storeName },
+      {
+        withCredentials: true,
+      }
+    );
+    setStoreName(false);
+    router.refresh();
+  };
+
+  const UpdateStoreDescription = async () => {
+    const res = await axios.put(
+      `http://localhost:4000/api/store/updateStoreDescription/${storeData.map(
+        (item) => item._id
+      )}`,
+      { storeDescription: values.storeDescription },
+      {
+        withCredentials: true,
+      }
+    );
+    setOpenStoreDescription(false);
+    router.refresh();
+  };
+  const UpdateStoreLocation = async () => {
+    const res = await axios.put(
+      `http://localhost:4000/api/store/updateStoreLocation/${storeData.map(
+        (item) => item._id
+      )}`,
+      { sellerAddress: values.sellerAddress },
+      {
+        withCredentials: true,
+      }
+    );
+    setOpenStoreDescription(false);
     router.refresh();
   };
   return (
@@ -194,12 +255,34 @@ function CurrrentUserStore({ storeData }) {
                           />
                           <div className="flex flex-col space-y-[0.5px]">
                             <h1 className="text-[24px] text-gray-800 flex items-center space-x-2">
-                              <span>{item.storeName}</span>
-                              <MdEdit
-                                color="#9748FF"
-                                size={17}
-                                className=" rounded-full cursor-pointer relative"
-                              />
+                              {storeName ? (
+                                <input
+                                  type="text"
+                                  className="outline-none"
+                                  autoFocus
+                                  placeholder={item.storeName}
+                                  onChange={(e) =>
+                                    setValues({
+                                      storeName: e.target.value,
+                                    })
+                                  }
+                                />
+                              ) : (
+                                <span>{item.storeName}</span>
+                              )}
+                              {storeName ? (
+                                <MdOutlineDone
+                                  onClick={UpdateStoreName}
+                                  className="cursor-pointer"
+                                />
+                              ) : (
+                                <MdEdit
+                                  color="#9748FF"
+                                  size={17}
+                                  onClick={handleToggleStoreName}
+                                  className=" rounded-full cursor-pointer relative"
+                                />
+                              )}
                             </h1>
                             <h5 className="text-[16px] text-gray-700">
                               Published Ads {item.publishedProducts.length}
@@ -253,9 +336,8 @@ function CurrrentUserStore({ storeData }) {
                       </div>
                       <hr className="lg:my-7 my-5" />
                       <div className="mx-5 lg:mx-10 mb-10 grid lg:grid-cols-3 grid-cols-1 md:grid-cols-2 gap-y-3 md:gap-3">
-                        {item.publishedProducts.length === 0 ? (
-                          <>
-                            {results.map((item) => (
+                        {item.publishedProducts.length === 0
+                          ? results.map((item) => (
                               <div
                                 className="border-gray-400 border-[0.5px] w-full lg:w-[240px] rounded-md"
                                 key={item.id}
@@ -297,11 +379,8 @@ function CurrrentUserStore({ storeData }) {
                                   </div>
                                 </div>
                               </div>
-                            ))}
-                          </>
-                        ) : (
-                          "e"
-                        )}
+                            ))
+                          : "e"}
                       </div>
                     </div>
                   </div>
@@ -320,30 +399,74 @@ function CurrrentUserStore({ storeData }) {
                     <div className="flex rounded-lg flex-col border-[0.5px] border-gray-300 py-5 px-6">
                       <h2 className="text-gray-800 font-bold text-xl flex items-center justify-between">
                         <span>About Store</span>{" "}
-                        <MdEdit
-                          color="#9748FF"
-                          size={17}
-                          className=" rounded-full cursor-pointer relative"
-                        />
+                        {openStoreDescription ? (
+                          <MdOutlineDone
+                            onClick={UpdateStoreDescription}
+                            className="cursor-pointer"
+                          />
+                        ) : (
+                          <MdEdit
+                            color="#9748FF"
+                            size={17}
+                            onClick={handleToggleStoreDescription}
+                            className=" rounded-full cursor-pointer relative"
+                          />
+                        )}
                       </h2>
                       <h5 className="text-gray-700 text-sm mt-2 flex space-x-2">
                         <div>
                           <RiErrorWarningLine />
                         </div>
-                        <span className="">{item?.storeDescription}</span>
+                        {openStoreDescription ? (
+                          <textarea
+                            onChange={(e) =>
+                              setValues({ storeDescription: e.target.value })
+                            }
+                            placeholder={item?.storeDescription}
+                            className="outline-none resize-none"
+                            autoFocus
+                            name=""
+                            id=""
+                          ></textarea>
+                        ) : (
+                          <span className="">{item?.storeDescription}</span>
+                        )}
                       </h5>
                     </div>
                     <div className="flex rounded-lg flex-col border-[0.5px] border-gray-300 py-5 px-6">
                       <h2 className="text-gray-800 font-bold text-xl flex items-center justify-between">
                         <span>Location</span>{" "}
-                        <MdEdit
-                          color="#9748FF"
-                          size={17}
-                          className=" rounded-full cursor-pointer relative"
-                        />
+                        {storeName ? (
+                          <MdOutlineDone
+                            onClick={UpdateStoreLocation}
+                            className="cursor-pointer"
+                          />
+                        ) : (
+                          <MdEdit
+                            color="#9748FF"
+                            size={17}
+                            onClick={handleToggleStoreLocation}
+                            className=" rounded-full cursor-pointer relative"
+                          />
+                        )}
                       </h2>
                       <h5 className="text-gray-700 text-sm mt-2 flex space-x-2 items-center w-full">
-                        <FaLocationDot /> <span>{item.sellerAddress}</span>
+                        <FaLocationDot />
+                        {openStoreLocation ? (
+                          <input
+                            type="text"
+                            className="outline-none"
+                            autoFocus
+                            placeholder={item.sellerAddress}
+                            onChange={(e) =>
+                              setValues({
+                                sellerAddress: e.target.value,
+                              })
+                            }
+                          />
+                        ) : (
+                          <span>{item.sellerAddress}</span>
+                        )}
                       </h5>
                     </div>
                   </div>

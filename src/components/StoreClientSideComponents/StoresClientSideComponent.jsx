@@ -3,7 +3,6 @@ import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { BiLocationPlus } from "react-icons/bi";
 import { RxText } from "react-icons/rx";
 import { VscVerifiedFilled } from "react-icons/vsc";
 
