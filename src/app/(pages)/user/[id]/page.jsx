@@ -6,7 +6,7 @@ import UserClientSide from "../../../../components/User/UserClientSide";
 const getUser = async (id) => {
   try {
     const res = await axios.get(
-      `http://localhost:4000/api/user/${id}`,
+      `https://besty-backend.vercel.app/api/user/${id}`,
       {
         withCredentials: true,
       }

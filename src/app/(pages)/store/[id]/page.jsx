@@ -8,7 +8,7 @@ import Footer from '@/components/Footer';
 const getUserStore = async (id) => {
     try {
         const res = await axios.get(
-            `http://localhost:4000/api/userStore/${id}`,
+            `https://besty-backend.vercel.app/api/userStore/${id}`,
             {
                 withCredentials: true,
             }

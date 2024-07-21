@@ -155,7 +155,7 @@ function CurrrentUserStore({ storeData }) {
 
   const UploadBanner = async () => {
     const res = await axios.put(
-      `http://localhost:4000/api/store/updateStoreBanner/${storeData.map(
+      `https://besty-backend.vercel.app/api/store/updateStoreBanner/${storeData.map(
         (item) => item._id
       )}`,
       { storeBanner: values.storeBanner },
@@ -169,7 +169,7 @@ function CurrrentUserStore({ storeData }) {
 
   const UpdateStoreName = async () => {
     const res = await axios.put(
-      `http://localhost:4000/api/store/updateStoreName/${storeData.map(
+      `https://besty-backend.vercel.app/api/store/updateStoreName/${storeData.map(
         (item) => item._id
       )}`,
       { storeName: values.storeName },
@@ -183,7 +183,7 @@ function CurrrentUserStore({ storeData }) {
 
   const UpdateStoreDescription = async () => {
     const res = await axios.put(
-      `http://localhost:4000/api/store/updateStoreDescription/${storeData.map(
+      `https://besty-backend.vercel.app/api/store/updateStoreDescription/${storeData.map(
         (item) => item._id
       )}`,
       { storeDescription: values.storeDescription },
@@ -196,7 +196,7 @@ function CurrrentUserStore({ storeData }) {
   };
   const UpdateStoreLocation = async () => {
     const res = await axios.put(
-      `http://localhost:4000/api/store/updateStoreLocation/${storeData.map(
+      `https://besty-backend.vercel.app/api/store/updateStoreLocation/${storeData.map(
         (item) => item._id
       )}`,
       { sellerAddress: values.sellerAddress },

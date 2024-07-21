@@ -60,7 +60,7 @@ function Register() {
     try {
       setErrors([]);
       const response = await axios.post(
-        "http://localhost:4000/api/register",
+        "https://besty-backend.vercel.app/api/register",
         values,
         { withCredentials: true }
       );

@@ -9,7 +9,7 @@ import { VscVerifiedFilled } from "react-icons/vsc";
 const getCurrentUser = async () => {
   const jwtToken = localStorage.getItem("token");
   try {
-    const response = await axios.get("http://localhost:4000/api/currentuser", {
+    const response = await axios.get("https://besty-backend.vercel.app/api/currentuser", {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },
@@ -26,7 +26,7 @@ const getCurrentUser = async () => {
 const getFollowedStores = async (followedStores) => {
   try {
     const res = await axios.post(
-      "http://localhost:4000/api/store/getfollowedstore",
+      "https://besty-backend.vercel.app/api/store/getfollowedstore",
       { storeIds: followedStores },
       { withCredentials: true }
     );

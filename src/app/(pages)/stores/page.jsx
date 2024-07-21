@@ -7,7 +7,7 @@ import axios from "axios";
 // SSR RENDERING FOR GETTING ALL STORES
 const getAllStores = async () => {
   try {
-    const res = await axios.get("http://localhost:4000/api/stores", {
+    const res = await axios.get("https://besty-backend.vercel.app/api/stores", {
       withCredentials: true,
     });
     return res.data;
@@ -20,7 +20,7 @@ const getAllStores = async () => {
 // SSR RENDERING FOR GETTING ALL STORES
 const getAllVerifiedStores = async () => {
   try {
-    const res = await axios.get('http://localhost:4000/api/stores/verified', {
+    const res = await axios.get('https://besty-backend.vercel.app/api/stores/verified', {
       withCredentials: true,
     });
     return res.data;

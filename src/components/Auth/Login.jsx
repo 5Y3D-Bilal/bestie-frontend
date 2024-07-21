@@ -32,7 +32,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:4000/api/login', {
+      const response = await axios.post('https://besty-backend.vercel.app/api/login', {
         email: values.email,
         password: values.password,
       });

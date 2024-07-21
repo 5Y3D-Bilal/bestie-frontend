@@ -10,7 +10,7 @@ import { usePathname, useRouter } from "next/navigation";
 const getCurrentUser = async () => {
   const jwtToken = localStorage.getItem('token');
   try {
-    const response = await axios.get('http://localhost:4000/api/currentuser', {
+    const response = await axios.get('https://besty-backend.vercel.app/api/currentuser', {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },

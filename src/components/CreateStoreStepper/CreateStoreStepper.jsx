@@ -48,7 +48,7 @@ const Stepper = ({ userId }) => {
   const completeStoreCreattion = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/store/create",
+        "https://besty-backend.vercel.app/api/store/create",
         values,
         { withCredentials: true }
       );
