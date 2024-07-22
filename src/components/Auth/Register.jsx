@@ -76,7 +76,7 @@ function Register() {
 
   return (
     <div className="bg-[#9748FF] w-full lg:w-2/3  h-[550px] rounded-[20px] flex justify-center items-center flex-col text-white">
-      <h2 className="text-2xl font-medium mb-7">Create your account</h2>
+      <h2 className="text-2xl font-medium mb-7">Create your accountt</h2>
       <div className="w-[90%] md:w-[80%]">
         <form
           action=""
