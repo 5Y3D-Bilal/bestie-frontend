@@ -312,19 +312,19 @@ function StoreClientSideComponent({ storesData, verifiedStores }) {
       >
         {/* Followed Stores */}
         <div className="w-[22%] sticky top-[210px] overflow-x-auto overflow-y-hidden h-[100%] mb-10">
-          <div className="border-[0.5px] border-gray-300 py-4 px-5 rounded-lg">
+          <div className="border-[0.5px] border-b-[0px] border-gray-300 py-4 px-5 rounded-t-lg">
             <span className="text-[20px] text-gray-900 font-semibold">
               Followed Stores
             </span>
           </div>
-          <div className="border-[0.5px] mt-4 border-gray-300 py-4 px-5 rounded-lg flex flex-col space-y-4">
+          <div className="border-[0.5px] border-gray-300 flex flex-col justify-center space-y-3">
             {followedStoresData.map((item) => (
               <div
-                className="border-gray-300 py-3 px-2 justify-between rounded-lg flex items-center space-x-2 border-[0.5px]"
+                className="border-t-[0.5px] py-2 justify-between rounded-lg flex items-center space-x-2"
                 key={item._id}
               >
-                <div className="flex items-center space-x-2">
-                  <Link href={`/profile/${item._id}`}>
+                <Link href={`/profile/${item._id}`}>
+                  <div className="flex items-center space-x-2 mx-4 my-2">
                     <div className="relative w-[40px] h-[40px]">
                       <Image
                         src={item.storeLogo}
@@ -335,11 +335,11 @@ function StoreClientSideComponent({ storesData, verifiedStores }) {
                         style={{ objectFit: "cover" }}
                       />
                     </div>
-                  </Link>
-                  <h4 className="text-[12px] w-1/2 truncate">
-                    {item.storeName}
-                  </h4>
-                </div>
+                    <h4 className="text-[12px] w-1/2 truncate">
+                      {item.storeName}
+                    </h4>
+                  </div>
+                </Link>
               </div>
             ))}
           </div>
@@ -393,38 +393,35 @@ function StoreClientSideComponent({ storesData, verifiedStores }) {
           </div>
         </div>
         {/* Verified Stores */}
-        <div className="w-[25%] sticky top-[210px] overflow-x-auto overflow-y-hidden h-[100%] mb-10">
-          <div className="border-[0.5px] border-gray-300 py-4 px-5 rounded-lg">
+        <div className="w-[22%] sticky top-[210px] overflow-x-auto overflow-y-hidden h-[100%] mb-10">
+          <div className="border-[0.5px] border-b-[0px] border-gray-300 py-4 px-5 rounded-t-lg">
             <span className="text-[20px] text-gray-900 font-semibold">
               Verified Stores
             </span>
           </div>
-          <div className="border-[0.5px] mt-4 border-gray-300 py-4 px-5 rounded-lg flex flex-col space-y-4">
+          <div className="border-[0.5px] border-gray-300 flex flex-col justify-center space-y-3">
             {verifiedStores.map((item) => (
               <div
-                className="border-gray-300 py-3 px-2 justify-between rounded-lg flex items-center space-x-2 border-[0.5px]"
+                className="border-t-[0.5px] hover:bg-gray-100 py-2 justify-between flex items-center space-x-2"
                 key={item._id}
               >
-                <div className="flex items-center space-x-2">
-                  <div className="flex items-center space-x-2">
-                    <Link href={`/profile/${item._id}`}>
-                      <div className="relative w-[40px] h-[40px]">
-                        <Image
-                          src={item.storeLogo}
-                          alt={item.storeName}
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                          className="w-full rounded-full"
-                          fill
-                          style={{ objectFit: "cover" }}
-                        />
-                      </div>
-                    </Link>
-                    <h4 className="text-[12px] w-[150px] truncate">
+                <Link href={`/profile/${item._id}`}>
+                  <div className="flex items-center space-x-2 mx-4 mt-2">
+                    <div className="relative w-[40px] h-[40px]">
+                      <Image
+                        src={item.storeLogo}
+                        alt={item.storeName}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="w-full rounded-full"
+                        fill
+                        style={{ objectFit: "cover" }}
+                      />
+                    </div>
+                    <h4 className="text-[12px] w-1/2 truncate">
                       {item.storeName}
                     </h4>
                   </div>
-                  <VscVerifiedFilled color="green" />
-                </div>
+                </Link>
               </div>
             ))}
           </div>
