@@ -89,7 +89,6 @@ function Navbar() {
                           Post Ads
                         </span>
                       </button>
-                      
                     ) : (
                       ""
                     )}
