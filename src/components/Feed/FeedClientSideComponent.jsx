@@ -135,6 +135,7 @@ function FeedClientSideComponent({ storesData }) {
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 10vw"
                       className="rounded-full"
+                      priority
                     />
                   </div>
                   <div
