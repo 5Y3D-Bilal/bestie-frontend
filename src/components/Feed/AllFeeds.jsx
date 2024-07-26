@@ -162,10 +162,18 @@ function AllFeeds() {
     };
   }, []);
 
+  const handleOpenPeopleApp = () => {
+    window.location.href = 'ms-people://home';
+  };
+
+  const ShareURL = (id) => {
+    return `https://bestie-frontend.vercel.app/item/${id}`
+  }
+
   return (
     <>
       {modileProducts.map((item) => (
-        <div key={item.id} className="border-gray-400 border-[0.5px] w-full p-5 mb-5 h-[760px] lg:w-full rounded-md">
+        <div key={item.id} className="border-gray-400 border-[0.5px] w-full p-5 mb-5  lg:w-full rounded-md">
           <div className="flex justify-between mb-5 items-center">
             <div className="flex items-center  space-x-2">
               <div className="flex items-center">
@@ -189,7 +197,7 @@ function AllFeeds() {
             </div>
             <BsThreeDots className="cursor-pointer" />
           </div>
-          <div className=" " key={item._id}>
+          <div className="" key={item._id}>
             <div className="relative w-full h-[440px]">
               <Image
                 src={item.image}
@@ -226,11 +234,11 @@ function AllFeeds() {
                     </div>
                   </div>
                 </Link>
-                <p className="mt-1">{item.description}</p>
+                <p className="lg:mt-1 mt-5">{item.description}</p>
               </div>
               <div className="mt-10">
                 <hr />
-                <div className="flex justify-between items-center mt-2 text-gray-800 text-[14px]">
+                <div className="flex justify-between  w-full items-center py-3 text-gray-800 text-[14px]">
                   <div className="flex items-center space-x-1 cursor-pointer">
                     <AiFillLike /> <span>0 Likes</span>
                   </div>
@@ -260,7 +268,7 @@ function AllFeeds() {
             className="h-screen bg-black top-0 fixed w-full opacity-80 z-10 overflow-y-hidden"
             onClick={() => setOpenBannerImageUploader(false)}
           />
-          <div className="flex justify-center items-center bg-white  fixed w-[60%] h-[550px] z-20  rounded-md overflow-y-hidden">
+          <div className="flex justify-center items-center bg-white  fixed w-[80%] lg:w-[70%] h-[350px] lg:h-[550px] z-20  rounded-md overflow-y-hidden">
             <div className="relative w-full h-full overflow-y-hidden">
               <Image
                 src={showImage}
@@ -294,7 +302,7 @@ function AllFeeds() {
             className="h-screen bg-black opacity-40 top-0 fixed w-full z-10 overflow-y-hidden"
             onClick={() => setOpenShareSocials(false)}
           />
-          <div className="flex items-center bg-[#1b1b1b]  fixed w-[25%] h-[560px] z-20  rounded-md overflow-y-hidden">
+          <div className="flex items-center bg-[#1b1b1b]  fixed w-[80%] lg:w-[25%]  z-20  rounded-md overflow-y-hidden">
             <div className="w-full h-full overflow-y-hidden flex flex-col items-center my-6 mx-3">
               <div className="text-white mt-7 mb-2 flex flex-col items-center w-full">
                 <h6 className="font-bold">Share</h6>
@@ -302,18 +310,18 @@ function AllFeeds() {
                 <hr className="w-full h-[0.2px] mt-7" />
               </div>
               <div className="flex flex-col justify-center items-center mt-7">
-                <div className="text-white flex flex-col items-center hover:bg-gray-700 duration-500 cursor-pointer p-2 rounded-md">
+                <div onClick={handleOpenPeopleApp} className="text-white flex flex-col items-center hover:bg-gray-700 duration-500 cursor-pointer p-2 rounded-md">
                   <SlPeople size={22} />
                   <h6 className="text-[12px] mt-2">No contacts? No Problem</h6>
                   <h5 className="text-[12px] mt-1">Tap to start adding the most important people to you.</h5>
-                </div>
+                </div >
                 <div></div>
               </div>
               <hr className="w-full h-[0.2px] mt-10" />
               <div className="grid grid-cols-4 gap-5 mt-10">
                 <FacebookShareButton
                   className=" flex flex-col items-center"
-                  url={`https://bestie-frontend.vercel.app/item/${"ewajebh"}`}
+                  url={ShareURL('eaweae')}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -324,7 +332,7 @@ function AllFeeds() {
                 </FacebookShareButton>
                 <WhatsappShareButton
                   className=" flex flex-col items-center"
-                  url={`https://bestie-frontend.vercel.app/item/${"ewajebh"}`}
+                  url={ShareURL('eaweae')}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -335,7 +343,7 @@ function AllFeeds() {
                 </WhatsappShareButton>
                 <EmailShareButton
                   className=" flex flex-col items-center"
-                  url={`https://bestie-frontend.vercel.app/item/${"ewajebh"}`}
+                  url={ShareURL('eaweae')}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -346,7 +354,7 @@ function AllFeeds() {
                 </EmailShareButton>
                 <TwitterShareButton
                   className=" flex flex-col items-center"
-                  url={`https://bestie-frontend.vercel.app/item/${"ewajebh"}`}
+                  url={ShareURL('eaweae')}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -357,7 +365,7 @@ function AllFeeds() {
                 </TwitterShareButton>
                 <TelegramShareButton
                   className=" flex flex-col items-center"
-                  url={`https://bestie-frontend.vercel.app/item/${"ewajebh"}`}
+                  url={ShareURL('eaweae')}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -368,7 +376,7 @@ function AllFeeds() {
                 </TelegramShareButton>
                 <RedditShareButton
                   className=" flex flex-col items-center"
-                  url={`https://bestie-frontend.vercel.app/item/${"ewajebh"}`}
+                  url={ShareURL('eaweae')}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -379,7 +387,7 @@ function AllFeeds() {
                 </RedditShareButton>
                 <LinkedinShareButton
                   className=" flex flex-col items-center"
-                  url={`https://bestie-frontend.vercel.app/item/${"ewajebh"}`}
+                  url={ShareURL('eaweae')}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >

@@ -246,10 +246,10 @@ function StoreClientSideComponent({ storesData, verifiedStores }) {
   };
 
   return (
-    <div className="max-w-6xl mx-auto mt-[7.5rem]">
-      <div className="bg-white z-10 py-5 mb-2 space-x-3 flex px-10 justify-between sticky top-[110px] overflow-x-auto overflow-y-hidden ">
+    <div className="max-w-6xl mx-auto mt-[5rem] lg:mt-[7.5rem]">
+      <div className="bg-white z-10 py-5 mb-2 space-x-3 flex px-5 lg:px-10 justify-between sticky top-[80px] lg:top-[110px] overflow-x-auto overflow-y-hidden ">
         {/* Cities Filter */}
-        <div className="w-1/4">
+        <div className="lg:block hidden w-1/4">
           <form className="w-full mx-auto">
             <select
               id="default"
@@ -268,7 +268,7 @@ function StoreClientSideComponent({ storesData, verifiedStores }) {
           </form>
         </div>
         {/* Cities Categories */}
-        <div className="w-1/4">
+        <div className="lg:block hidden w-1/4">
           <form className="w-full mx-auto">
             <select
               id="default"
@@ -287,7 +287,7 @@ function StoreClientSideComponent({ storesData, verifiedStores }) {
           </form>
         </div>
         {/* Search for Stores */}
-        <div className="w-1/2">
+        <div className="w-full lg:w-1/2">
           <div className="flex items-center rounded-md bg-white py-2 px-3 border-[0.5px] border-gray-300">
             <RxText />
             <form
@@ -307,11 +307,11 @@ function StoreClientSideComponent({ storesData, verifiedStores }) {
         </div>
       </div>
       <div
-        className="flex space-x-5
+        className="flex lg:space-x-5
       "
       >
         {/* Followed Stores */}
-        <div className="w-[22%] sticky top-[210px] overflow-x-auto overflow-y-hidden h-[100%] mb-10">
+        <div className="hidden lg:block w-[22%] sticky top-[210px] overflow-x-auto overflow-y-hidden h-[100%] mb-10">
           <div className="border-[0.5px] border-b-[0px] border-gray-300 py-4 px-5 rounded-t-lg">
             <span className="text-[20px] text-gray-900 font-semibold">
               Followed Stores
@@ -345,15 +345,15 @@ function StoreClientSideComponent({ storesData, verifiedStores }) {
           </div>
         </div>
         {/* All Stores */}
-        <div className="w-1/2 mb-10">
-          <div className="grid lg:grid-cols-2 mb-5 gap-y-3">
+        <div className="w-full mx-5 lg:mx-0 lg:w-1/2 mb-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 mb-5 gap-y-3">
             {results.slice(0, visibleStores).map((item) => (
               <div
                 className="border-gray-400 border-[0.5px] w-full lg:w-[280px] rounded-md "
                 key={item._id}
               >
                 <Link href={`/profile/${item._id}`}>
-                  <div className="relative w-full h-[240px]">
+                  <div className="relative h-[240px]">
                     <Image
                       src={item.storeLogo}
                       alt={item.storeName}
@@ -393,7 +393,7 @@ function StoreClientSideComponent({ storesData, verifiedStores }) {
           </div>
         </div>
         {/* Verified Stores */}
-        <div className="w-[22%] sticky top-[210px] overflow-x-auto overflow-y-hidden h-[100%] mb-10">
+        <div className="hidden lg:block w-[22%] sticky top-[210px] overflow-x-auto overflow-y-hidden h-[100%] mb-10">
           <div className="border-[0.5px] border-b-[0px] border-gray-300 py-4 px-5 rounded-t-lg">
             <span className="text-[20px] text-gray-900 font-semibold">
               Verified Stores

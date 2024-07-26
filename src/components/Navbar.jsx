@@ -5,12 +5,12 @@ import logo from "../../public/logo.png";
 import Link from "next/link";
 import axios from "axios";
 import { usePathname, useRouter } from "next/navigation";
-
+import NavMobile from "./MobileNavbar";
 
 const getCurrentUser = async () => {
-  const jwtToken = localStorage.getItem('token');
+  const jwtToken = localStorage.getItem("token");
   try {
-    const response = await axios.get('https://besty-backend.vercel.app/api/currentuser', {
+    const response = await axios.get("https://besty-backend.vercel.app/api/currentuser", {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },
@@ -24,7 +24,7 @@ const getCurrentUser = async () => {
 };
 
 function Navbar() {
-  const router = useRouter()
+  const router = useRouter();
   const [settings, setSettings] = useState(false);
   const ToggleSettings = () => {
     setSettings(!settings);
@@ -34,7 +34,7 @@ function Navbar() {
   useEffect(() => {
     const fetchCurrentUser = async () => {
       const user = await getCurrentUser();
-      router.refresh()
+      router.refresh();
       setCurrentUser(user);
     };
 
@@ -53,15 +53,24 @@ function Navbar() {
       <nav className="py-1 bg-white lg:mx-auto z-50 fixed top-0 w-full">
         <div className="max-w-6xl lg:mx-auto mx-5">
           <div className="flex justify-between items-center  py-1 ">
-            <Link href={"/"}>
-              <Image
-                src={logo}
-                width="100"
-                height="100"
-                alt="SiteLogo"
-                priority
-              />
-            </Link>
+            <div className="flex items-center">
+              <div className="lg:hidden block">
+                <NavMobile />
+              </div>
+              <Link href={"/"}>
+                <div className="border-white border-[6px] relative rounded-full w-[80px] h-[80px] lg:w-[100px] lg:h-[100px]">
+                  <Image
+                    src={logo}
+                    alt="user profile image"
+                    style={{ objectFit: "cover" }}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 10vw"
+                    className="rounded-full"
+                    priority
+                  />
+                </div>
+              </Link>
+            </div>
             <div className="flex items-center space-x-3">
               <div>
                 <div className="lg:flex items-center space-x-4 hidden">
@@ -70,8 +79,9 @@ function Navbar() {
                     return (
                       <Link
                         key={item.name}
-                        className={`cursor-pointer ${isActive && "text-[#9748FF]"
-                          } font-semibold leading-4`}
+                        className={`cursor-pointer ${
+                          isActive && "text-[#9748FF]"
+                        } font-semibold leading-4`}
                         href={item.href}
                       >
                         {item.name}
@@ -84,7 +94,7 @@ function Navbar() {
                 {currentUser ? (
                   <div className="flex space-x-3 items-center">
                     {currentUser?.storeId ? (
-                      <button className="w-28 h-12 bg-white cursor-pointer rounded-3xl border-2 border-[#9748FF] shadow-[inset_0px_-2px_0px_1px_#9748FF] group hover:bg-[#9748FF] transition duration-300 ease-in-out">
+                      <button className="w-24 h-10 lg:w-28 lg:h-12 bg-white cursor-pointer rounded-3xl border-2 border-[#9748FF] shadow-[inset_0px_-2px_0px_1px_#9748FF] group hover:bg-[#9748FF] transition duration-300 ease-in-out">
                         <span className="font-medium text-[#333] group-hover:text-white">
                           Post Ads
                         </span>
@@ -98,7 +108,7 @@ function Navbar() {
                     >
                       <Image
                         src={currentUser?.profileImage}
-                        className="cursor-pointer rounded-full w-[50px] h-[50px]"
+                        className="cursor-pointer rounded-full w-[40px] h-[40px] lg:w-[50px] lg:h-[50px]"
                         width="100"
                         height="100"
                         alt="SiteLogo"

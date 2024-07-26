@@ -3,13 +3,38 @@ import axios from "axios";
 import moment from "moment";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AiFillLike } from "react-icons/ai";
 import { BsThreeDots } from "react-icons/bs";
-import { FaComment, FaLocationDot, FaShareNodes, FaStar } from "react-icons/fa6";
+import {
+  FaComment,
+  FaLocationDot,
+  FaShareNodes,
+  FaStar,
+} from "react-icons/fa6";
 import { GrFormNextLink } from "react-icons/gr";
 import { HiBuildingOffice2 } from "react-icons/hi2";
+import { IoMdClose } from "react-icons/io";
 import { IoSearchOutline } from "react-icons/io5";
+import { RxEnterFullScreen } from "react-icons/rx";
+import { SiMicrosoftstore } from "react-icons/si";
+import { SlPeople } from "react-icons/sl";
+import {
+  EmailIcon,
+  EmailShareButton,
+  FacebookIcon,
+  FacebookShareButton,
+  LinkedinIcon,
+  LinkedinShareButton,
+  RedditIcon,
+  RedditShareButton,
+  TelegramIcon,
+  TelegramShareButton,
+  TwitterShareButton,
+  WhatsappIcon,
+  WhatsappShareButton,
+  XIcon,
+} from "react-share";
 
 const getCurrentUser = async () => {
   const jwtToken = localStorage.getItem("token");
@@ -45,6 +70,8 @@ function CurrentUserFeeds() {
   const [isFollowing, setIsFollowing] = useState(false);
   const [liked, setLiked] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const [storeId, setStoreId] = useState('');
+  const [productId, setProductId] = useState('');
   const [storeData, setStoreData] = useState(null);
   const modileProducts = [
     {
@@ -133,7 +160,6 @@ function CurrentUserFeeds() {
     };
     fetchCurrentUser();
   }, []);
-  console.log(storeData);
   const joinData = moment(storeData?.map((i) => i.createdAt)).format(
     "MMMM YYYY"
   );
@@ -151,80 +177,80 @@ function CurrentUserFeeds() {
     setResults(results);
   };
 
-  const HandleSubmitFollow = async () => {
-    setIsFollowing(true);
-    try {
-      const response = await axios.put(
-        "https://besty-backend.vercel.app/api/store/follow",
-        {
-          id: currentUser.id,
-          storeId: storeData._id,
-        },
-        { withCredentials: true }
-      );
+  const [openBannerImageUploader, setOpenBannerImageUploader] = useState(false);
+  const [showImage, setShowImage] = useState(false);
+  const handleToggleBanner = (image) => {
+    setOpenBannerImageUploader((prevState) => !prevState);
+    setShowImage(image);
+  };
 
-      router.refresh();
-    } catch (error) {
-      console.error("Error following store", error);
-      setIsFollowing(false); // Revert the state if request fails
+  const [openItemShareSocials, setOpenItemShareSocials] = useState(false);
+  const [sharingProductName, setSharingProductName] = useState("");
+  const handleOpenShare = (productName , productId) => {
+    setOpenItemShareSocials((prevState) => !prevState);
+    setProductId(productId)
+    setSharingProductName(productName);
+  };
+
+  const [openShareProfileSocials, setOpenShareProfileSocials] = useState(false);
+  const handleProfileShare = (productName, storeId) => {
+    setOpenShareProfileSocials((prevState) => !prevState);
+    setStoreId(storeId)
+    setSharingProductName(productName);
+  };
+
+  //   For Scaling the Image
+  const elementRef = useRef(null);
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
+  const handleToggleFullScreen = () => {
+    if (elementRef.current) {
+      if (!isFullScreen) {
+        if (elementRef.current.requestFullscreen) {
+          elementRef.current.requestFullscreen();
+        } else if (elementRef.current.mozRequestFullScreen) {
+          elementRef.current.mozRequestFullScreen(); // Firefox
+        } else if (elementRef.current.webkitRequestFullscreen) {
+          elementRef.current.webkitRequestFullscreen(); // Chrome, Safari, and Opera
+        } else if (elementRef.current.msRequestFullscreen) {
+          elementRef.current.msRequestFullscreen(); // Internet Explorer/Edge
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen(); // Firefox
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen(); // Chrome, Safari, and Opera
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen(); // Internet Explorer/Edge
+        }
+      }
+      setIsFullScreen(!isFullScreen);
     }
   };
 
-  const HandleSubmitUnFollow = async () => {
-    setIsFollowing(false);
-    try {
-      const response = await axios.put(
-        "https://besty-backend.vercel.app/api/store/unfollow",
-        {
-          id: currentUser.id,
-          storeId: storeData._id,
-        },
-        { withCredentials: true }
-      );
+  useEffect(() => {
+    const handleFullScreenChange = () => {
+      if (document.fullscreenElement) {
+        setIsFullScreen(true);
+      } else {
+        setIsFullScreen(false);
+      }
+    };
 
-      router.refresh();
-    } catch (error) {
-      console.error("Error unfollowing store", error);
-      setIsFollowing(true); // Revert the state if request fails
-    }
+    document.addEventListener("fullscreenchange", handleFullScreenChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullScreenChange);
+    };
+  }, []);
+
+  const handleOpenPeopleApp = () => {
+    window.location.href = "ms-people://home";
   };
 
-  const HandleSubmitLike = async () => {
-    setLiked(true);
-    try {
-      const response = await axios.put(
-        "https://besty-backend.vercel.app/api/store/like",
-        {
-          id: currentUser.id,
-          storeId: storeData._id,
-        },
-        { withCredentials: true }
-      );
-
-      router.refresh();
-    } catch (error) {
-      console.error("Error following store", error);
-      setLiked(false); // Revert the state if request fails
-    }
-  };
-
-  const HandleSubmitUnLike = async () => {
-    setLiked(false);
-    try {
-      const response = await axios.put(
-        "https://besty-backend.vercel.app/api/store/unlike",
-        {
-          id: currentUser.id,
-          storeId: storeData._id,
-        },
-        { withCredentials: true }
-      );
-
-      router.refresh();
-    } catch (error) {
-      console.error("Error following store", error);
-      setLiked(true); // Revert the state if request fails
-    }
+  const ShareURL = (id, shareSource) => {
+    return `https://bestie-frontend.vercel.app/${shareSource}/${id}`;
   };
 
   return (
@@ -288,7 +314,10 @@ function CurrentUserFeeds() {
                   <AiFillLike />
                   <span>{storeData.likes.length}</span>
                 </button>
-                <button className="flex bg-gray-100 rounded-full space-x-1 py-1 px-3 text-[12px] text-gray-800 items-center">
+                <button
+                  onClick={() => handleProfileShare(storeData.storeName, storeData._id)}
+                  className="flex bg-gray-100 rounded-full space-x-1 py-1 px-3 text-[12px] text-gray-800 items-center"
+                >
                   <FaShareNodes /> <span>Share</span>
                 </button>
                 <button className="flex bg-gray-100 rounded-full space-x-1 py-1 px-3 text-[12px] text-gray-800 items-center">
@@ -320,97 +349,373 @@ function CurrentUserFeeds() {
         </div>
       ))}
       <div className="mt-5">
-      {modileProducts.map((item) => (
-        <div
-          key={item.id}
-          className="border-gray-400 border-[0.5px] w-full p-5 mb-5 h-[760px] lg:w-full rounded-md"
-        >
-          <div className="flex justify-between mb-5 items-center">
-            <div className="flex items-center  space-x-2">
-              <div className="flex items-center">
-                <div className="border-white border-[6px] relative rounded-full w-[20px] h-[20px] lg:w-[50px] lg:h-[50px]">
-                  <Image
-                    src={item.image}
-                    alt="UserProfileImage"
-                    style={{ objectFit: "cover" }}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 10vw"
-                    className="rounded-full"
-                    priority
-                  />
-                </div>
-
-                <div className="">
-                  <h4 className="text-[17px]">{item.name}</h4>
-                  <h6 className="text-[14px]">{item.date}</h6>
-                </div>
-              </div>
-            </div>
-            <BsThreeDots className="cursor-pointer" />
-          </div>
-          <div className=" " key={item._id}>
-            <div className="relative w-full h-[440px]">
-              <Image
-                src={item.image}
-                onClick={() => handleToggleBanner(item.image)}
-                alt="Store Logo"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                className="w-full rounded-md cursor-pointer"
-                fill
-                style={{ objectFit: "cover" }}
-              />
-            </div>
-            <div className="mt-3">
-              <div>
-                <Link
-                  href={"/"}
-                  className="flex items-center bg-gray-100 rounded-md p-2 space-x-3"
-                >
-                  <div className=" relative rounded-full w-[20px] h-[20px] lg:w-[50px] lg:h-[50px]">
+        {modileProducts.map((item) => (
+          <div
+            key={item.id}
+            className="border-gray-400 border-[0.5px] w-full p-5 mb-5 h-[760px] lg:w-full rounded-md"
+          >
+            <div className="flex justify-between mb-5 items-center">
+              <div className="flex items-center  space-x-2">
+                <div className="flex items-center">
+                  <div className="border-white border-[6px] relative rounded-full w-[20px] h-[20px] lg:w-[50px] lg:h-[50px]">
                     <Image
                       src={item.image}
                       alt="UserProfileImage"
                       style={{ objectFit: "cover" }}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 10vw"
-                      className="rounded-md"
+                      className="rounded-full"
                       priority
                     />
                   </div>
-                  <div className="text-[12px]">
-                    <h6 className="font-bold">{item.name}</h6>
-                    <h6 className="font-bold text-red-600">Rs {item.price}</h6>
-                    <div className="flex items-center space-x-1">
-                      <FaLocationDot /> <span>{item.city}</span>
-                    </div>
+
+                  <div className="">
+                    <h4 className="text-[17px]">{item.name}</h4>
+                    <h6 className="text-[14px]">{item.date}</h6>
                   </div>
-                </Link>
-                <p className="mt-1">{item.description}</p>
+                </div>
               </div>
-              <div className="mt-10">
-                <hr />
-                <div className="flex justify-between items-center mt-2 text-gray-800 text-[14px]">
-                  <div className="flex items-center space-x-1 cursor-pointer">
-                    <AiFillLike /> <span>0 Likes</span>
-                  </div>
-                  <div className="flex items-center space-x-1 cursor-pointer">
-                    <FaComment />
-                    <span>Comments</span>
-                  </div>
-                  <div
-                    onClick={() => handleOpenShare(item.name)}
-                    className="flex items-center space-x-1 cursor-pointer"
+              <BsThreeDots className="cursor-pointer" />
+            </div>
+            <div className=" " key={item._id}>
+              <div className="relative w-full h-[440px]">
+                <Image
+                  src={item.image}
+                  onClick={() => handleToggleBanner(item.image)}
+                  alt="Store Logo"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="w-full rounded-md cursor-pointer"
+                  fill
+                  style={{ objectFit: "cover" }}
+                />
+              </div>
+              <div className="mt-3">
+                <div>
+                  <Link
+                    href={"/"}
+                    className="flex items-center bg-gray-100 rounded-md p-2 space-x-3"
                   >
-                    <FaShareNodes />
-                    <span>Share</span>
+                    <div className=" relative rounded-full w-[20px] h-[20px] lg:w-[50px] lg:h-[50px]">
+                      <Image
+                        src={item.image}
+                        alt="UserProfileImage"
+                        style={{ objectFit: "cover" }}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 10vw"
+                        className="rounded-md"
+                        priority
+                      />
+                    </div>
+                    <div className="text-[12px]">
+                      <h6 className="font-bold">{item.name}</h6>
+                      <h6 className="font-bold text-red-600">
+                        Rs {item.price}
+                      </h6>
+                      <div className="flex items-center space-x-1">
+                        <FaLocationDot /> <span>{item.city}</span>
+                      </div>
+                    </div>
+                  </Link>
+                  <p className="mt-1">{item.description}</p>
+                </div>
+                <div className="mt-10">
+                  <hr />
+                  <div className="flex justify-between items-center mt-2 text-gray-800 text-[14px]">
+                    <div className="flex items-center space-x-1 cursor-pointer">
+                      <AiFillLike /> <span>0 Likes</span>
+                    </div>
+                    <div className="flex items-center space-x-1 cursor-pointer">
+                      <FaComment />
+                      <span>Comments</span>
+                    </div>
+                    <div
+                      onClick={() => handleOpenShare(item.name, item.id)}
+                      className="flex items-center space-x-1 cursor-pointer"
+                    >
+                      <FaShareNodes />
+                      <span>Share</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
       </div>
+      {openBannerImageUploader && (
+        <div
+          ref={elementRef}
+          className="w-full h-screen top-0 absolute left-0 z-50  flex justify-center items-center overflow-y-hidden"
+        >
+          <div
+            className="h-screen bg-black top-0 fixed w-full opacity-80 z-10 overflow-y-hidden"
+            onClick={() => setOpenBannerImageUploader(false)}
+          />
+          <div className="flex justify-center items-center bg-white  fixed w-[80%] lg:w-[70%] h-[350px] lg:h-[550px] z-20  rounded-md overflow-y-hidden">
+            <div className="relative w-full h-full overflow-y-hidden">
+              <Image
+                src={showImage}
+                alt="imgToBeUpload"
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                style={{ objectFit: "cover" }}
+              />
+            </div>
+          </div>
+          <div className="z-50 top-0 fixed right-0 text-white bg-gray-900 py-2 px-3 flex space-x-4">
+            <RxEnterFullScreen
+              size={24}
+              className="cursor-pointer"
+              onClick={handleToggleFullScreen}
+            />
+            <IoMdClose
+              size={24}
+              className="cursor-pointer"
+              onClick={() => setOpenBannerImageUploader(false)}
+            />
+          </div>
+        </div>
+      )}
+      {openItemShareSocials && (
+        <div className="w-full h-screen top-0 absolute left-0 z-50  flex justify-center items-center overflow-y-hidden">
+          <div
+            className="h-screen bg-black opacity-40 top-0 fixed w-full z-10 overflow-y-hidden"
+            onClick={() => setOpenItemShareSocials(false)}
+          />
+          <div className="flex items-center bg-[#1b1b1b]  fixed w-[80%] lg:w-[25%]  z-20  rounded-md overflow-y-hidden">
+            <div className="w-full h-full overflow-y-hidden flex flex-col items-center my-6 mx-3">
+              <div className="text-white mt-7 mb-2 flex flex-col items-center w-full">
+                <h6 className="font-bold">Share</h6>
+                <p className="text-[12px]">{sharingProductName}</p>
+                <hr className="w-full h-[0.2px] mt-7" />
+              </div>
+              <div className="flex flex-col justify-center items-center mt-7">
+                <div
+                  onClick={handleOpenPeopleApp}
+                  className="text-white flex flex-col items-center hover:bg-gray-700 duration-500 cursor-pointer p-2 rounded-md"
+                >
+                  <SlPeople size={22} />
+                  <h6 className="text-[12px] mt-2">No contacts? No Problem</h6>
+                  <h5 className="text-[12px] mt-1">
+                    Tap to start adding the most important people to you.
+                  </h5>
+                </div>
+                <div></div>
+              </div>
+              <hr className="w-full h-[0.2px] mt-10" />
+              <div className="grid grid-cols-4 gap-5 mt-10">
+                <FacebookShareButton
+                  className=" flex flex-col items-center"
+                  url={ShareURL(productId, "item")}
+                  quote={"Title or jo bhi aapko likhna ho"}
+                  hashtag={"#portfolio..."}
+                >
+                  <FacebookIcon size={40} round={true} />
+                  <span className="text-[13px] mt-1.5 text-white text-center ">
+                    Facebook
+                  </span>
+                </FacebookShareButton>
+                <WhatsappShareButton
+                  className=" flex flex-col items-center"
+                  url={ShareURL(productId, "item")}
+                  quote={"Title or jo bhi aapko likhna ho"}
+                  hashtag={"#portfolio..."}
+                >
+                  <WhatsappIcon size={40} round={true} />
+                  <span className="text-[13px] mt-1.5 text-white text-center ">
+                    Whatsapp
+                  </span>
+                </WhatsappShareButton>
+                <EmailShareButton
+                  className=" flex flex-col items-center"
+                  url={ShareURL(productId, "item")}
+                  quote={"Title or jo bhi aapko likhna ho"}
+                  hashtag={"#portfolio..."}
+                >
+                  <EmailIcon size={40} round={true} />
+                  <span className="text-[13px] mt-1.5 text-white text-center ">
+                    Email
+                  </span>
+                </EmailShareButton>
+                <TwitterShareButton
+                  className=" flex flex-col items-center"
+                  url={ShareURL(productId, "item")}
+                  quote={"Title or jo bhi aapko likhna ho"}
+                  hashtag={"#portfolio..."}
+                >
+                  <XIcon size={40} round={true} />
+                  <span className="text-[13px] mt-1.5 text-white text-center ">
+                    X
+                  </span>
+                </TwitterShareButton>
+                <TelegramShareButton
+                  className=" flex flex-col items-center"
+                  url={ShareURL(productId, "item")}
+                  quote={"Title or jo bhi aapko likhna ho"}
+                  hashtag={"#portfolio..."}
+                >
+                  <TelegramIcon size={40} round={true} />{" "}
+                  <span className="text-[13px] mt-1.5 text-white text-center ">
+                    Telegram
+                  </span>
+                </TelegramShareButton>
+                <RedditShareButton
+                  className=" flex flex-col items-center"
+                  url={ShareURL(productId, "item")}
+                  quote={"Title or jo bhi aapko likhna ho"}
+                  hashtag={"#portfolio..."}
+                >
+                  <RedditIcon size={40} round={true} />{" "}
+                  <span className="text-[13px] mt-1.5 text-white text-center ">
+                    Reddit
+                  </span>
+                </RedditShareButton>
+                <LinkedinShareButton
+                  className=" flex flex-col items-center"
+                  url={ShareURL(productId, "item")}
+                  quote={"Title or jo bhi aapko likhna ho"}
+                  hashtag={"#portfolio..."}
+                >
+                  <LinkedinIcon size={40} round={true} />{" "}
+                  <span className="text-[13px] mt-1.5 text-white text-center ">
+                    LinkedIn
+                  </span>
+                </LinkedinShareButton>
+              </div>
+              <hr className="w-full h-[0.2px] mt-10" />
+              <div className="mt-1 text-white w-full">
+                <Link
+                  href={"ms-windows-store://home"}
+                  className="flex items-center justify-center space-x-2"
+                >
+                  <SiMicrosoftstore />{" "}
+                  <h5 className="text-[14px] mt-1">Get apps in Store.</h5>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {openShareProfileSocials && (
+        <div className="w-full h-screen top-0 absolute left-0 z-50  flex justify-center items-center overflow-y-hidden">
+          <div
+            className="h-screen bg-black opacity-40 top-0 fixed w-full z-10 overflow-y-hidden"
+            onClick={() => setOpenShareProfileSocials(false)}
+          />
+          <div className="flex items-center bg-[#1b1b1b]  fixed w-[80%] lg:w-[25%]  z-20  rounded-md overflow-y-hidden">
+            <div className="w-full h-full overflow-y-hidden flex flex-col items-center my-6 mx-3">
+              <div className="text-white mt-7 mb-2 flex flex-col items-center w-full">
+                <h6 className="font-bold">Share</h6>
+                <p className="text-[12px]">{sharingProductName}</p>
+                <hr className="w-full h-[0.2px] mt-7" />
+              </div>
+              <div className="flex flex-col justify-center items-center mt-7">
+                <div
+                  onClick={handleOpenPeopleApp}
+                  className="text-white flex flex-col items-center hover:bg-gray-700 duration-500 cursor-pointer p-2 rounded-md"
+                >
+                  <SlPeople size={22} />
+                  <h6 className="text-[12px] mt-2">No contacts? No Problem</h6>
+                  <h5 className="text-[12px] mt-1">
+                    Tap to start adding the most important people to you.
+                  </h5>
+                </div>
+                <div></div>
+              </div>
+              <hr className="w-full h-[0.2px] mt-10" />
+              <div className="grid grid-cols-4 gap-5 mt-10">
+                <FacebookShareButton
+                  className=" flex flex-col items-center"
+                  url={ShareURL(storeId, "profile")}
+                  quote={"Title or jo bhi aapko likhna ho"}
+                  hashtag={"#portfolio..."}
+                >
+                  <FacebookIcon size={40} round={true} />
+                  <span className="text-[13px] mt-1.5 text-white text-center ">
+                    Facebook
+                  </span>
+                </FacebookShareButton>
+                <WhatsappShareButton
+                  className=" flex flex-col items-center"
+                  url={ShareURL(storeId, "profile")}
+                  quote={"Title or jo bhi aapko likhna ho"}
+                  hashtag={"#portfolio..."}
+                >
+                  <WhatsappIcon size={40} round={true} />
+                  <span className="text-[13px] mt-1.5 text-white text-center ">
+                    Whatsapp
+                  </span>
+                </WhatsappShareButton>
+                <EmailShareButton
+                  className=" flex flex-col items-center"
+                  url={ShareURL(storeId, "profile")}
+                  quote={"Title or jo bhi aapko likhna ho"}
+                  hashtag={"#portfolio..."}
+                >
+                  <EmailIcon size={40} round={true} />
+                  <span className="text-[13px] mt-1.5 text-white text-center ">
+                    Email
+                  </span>
+                </EmailShareButton>
+                <TwitterShareButton
+                  className=" flex flex-col items-center"
+                  url={ShareURL(storeId, "profile")}
+                  quote={"Title or jo bhi aapko likhna ho"}
+                  hashtag={"#portfolio..."}
+                >
+                  <XIcon size={40} round={true} />
+                  <span className="text-[13px] mt-1.5 text-white text-center ">
+                    X
+                  </span>
+                </TwitterShareButton>
+                <TelegramShareButton
+                  className=" flex flex-col items-center"
+                  url={ShareURL(storeId, "profile")}
+                  quote={"Title or jo bhi aapko likhna ho"}
+                  hashtag={"#portfolio..."}
+                >
+                  <TelegramIcon size={40} round={true} />{" "}
+                  <span className="text-[13px] mt-1.5 text-white text-center ">
+                    Telegram
+                  </span>
+                </TelegramShareButton>
+                <RedditShareButton
+                  className=" flex flex-col items-center"
+                  url={ShareURL(storeId, "profile")}
+                  quote={"Title or jo bhi aapko likhna ho"}
+                  hashtag={"#portfolio..."}
+                >
+                  <RedditIcon size={40} round={true} />{" "}
+                  <span className="text-[13px] mt-1.5 text-white text-center ">
+                    Reddit
+                  </span>
+                </RedditShareButton>
+                <LinkedinShareButton
+                  className=" flex flex-col items-center"
+                  url={ShareURL("eawe", "profile")}
+                  quote={"Title or jo bhi aapko likhna ho"}
+                  hashtag={"#portfolio..."}
+                >
+                  <LinkedinIcon size={40} round={true} />{" "}
+                  <span className="text-[13px] mt-1.5 text-white text-center ">
+                    LinkedIn
+                  </span>
+                </LinkedinShareButton>
+              </div>
+              <hr className="w-full h-[0.2px] mt-10" />
+              <div className="mt-1 text-white w-full">
+                <Link
+                  href={"ms-windows-store://home"}
+                  className="flex items-center justify-center space-x-2"
+                >
+                  <SiMicrosoftstore />{" "}
+                  <h5 className="text-[14px] mt-1">Get apps in Store.</h5>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

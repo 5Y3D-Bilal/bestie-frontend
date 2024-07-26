@@ -66,9 +66,9 @@ function FeedClientSideComponent({ storesData }) {
   return (
     <div className="mt-32">
       <div className="max-w-6xl mx-auto">
-        <div className="flex space-x-5 w-full justify-between">
+        <div className="flex lg:space-x-5 w-full justify-between">
           {/* Followed Stores */}
-          <div className="w-[22%] sticky top-[130px] overflow-x-auto overflow-y-hidden h-[100%]">
+          <div className="lg:block hidden w-[22%] sticky top-[130px] overflow-x-auto overflow-y-hidden h-[100%]">
             <div className=" mb-4">
               <div className="border-[0.5px] flex space-x-3 items-center border-gray-300 py-4 px-3 rounded-lg">
                 <div className="flex items-center space-x-3">
@@ -118,12 +118,12 @@ function FeedClientSideComponent({ storesData }) {
               </div>
             </div>
           </div>
-          <div className="w-1/2 mb-10">
+          <div className="w-full mx-5 lg:mx-0 lg:w-1/2 mb-10">
             <div className="grid lg:grid-cols-1 ">
               <FeedModel storesData={storesData} />
             </div>
           </div>
-          <div className="w-[22%] sticky top-[130px] overflow-x-auto overflow-y-hidden h-[100%]">
+          <div className="lg:block hidden w-[22%] sticky top-[130px] overflow-x-auto overflow-y-hidden h-[100%]">
             <div className=" mb-4">
               <div className="border-[0.5px] flex space-x-3 items-center border-gray-300 py-4 px-3 rounded-lg">
                 <div className="flex items-center space-x-1">

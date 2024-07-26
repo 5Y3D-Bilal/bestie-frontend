@@ -14,11 +14,14 @@ import { useRouter } from "next/navigation";
 import { FaLocationDot } from "react-icons/fa6";
 import { RiErrorWarningLine } from "react-icons/ri";
 import { IoCallOutline } from "react-icons/io5";
+import { SlPeople } from "react-icons/sl";
+import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, RedditIcon, RedditShareButton, TelegramIcon, TelegramShareButton, TwitterShareButton, WhatsappIcon, WhatsappShareButton, XIcon } from "react-share";
+import { SiMicrosoftstore } from "react-icons/si";
 
 const getCurrentUser = async () => {
   const jwtToken = localStorage.getItem("token");
   try {
-    const response = await axios.get("https://besty-backend.vercel.app/api/currentuser", {
+    const response = await axios.get("http://localhost:4000/api/currentuser", {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },
@@ -167,7 +170,7 @@ function SingleStoreClientSideComponent({ storeData }) {
     setIsFollowing(true);
     try {
       const response = await axios.put(
-        "https://besty-backend.vercel.app/api/store/follow",
+        "ttp://localhost:4000/api/store/follow",
         {
           id: currentUser.id,
           storeId: storeData._id,
@@ -186,7 +189,7 @@ function SingleStoreClientSideComponent({ storeData }) {
     setIsFollowing(false);
     try {
       const response = await axios.put(
-        "https://besty-backend.vercel.app/api/store/unfollow",
+        "ttp://localhost:4000/api/store/unfollow",
         {
           id: currentUser.id,
           storeId: storeData._id,
@@ -205,7 +208,7 @@ function SingleStoreClientSideComponent({ storeData }) {
     setLiked(true);
     try {
       const response = await axios.put(
-        "https://besty-backend.vercel.app/api/store/like",
+        "ttp://localhost:4000/api/store/like",
         {
           id: currentUser.id,
           storeId: storeData._id,
@@ -224,7 +227,7 @@ function SingleStoreClientSideComponent({ storeData }) {
     setLiked(false);
     try {
       const response = await axios.put(
-        "https://besty-backend.vercel.app/api/store/unlike",
+        "ttp://localhost:4000/api/store/unlike",
         {
           id: currentUser.id,
           storeId: storeData._id,
@@ -238,6 +241,20 @@ function SingleStoreClientSideComponent({ storeData }) {
       setLiked(true); // Revert the state if request fails
     }
   };
+  const [openShareSocials, setOpenShareSocials] = useState(false);
+  const [sharingProductName, setSharingProductName] = useState("");
+  const handleOpenShare = (productName) => {
+    setOpenShareSocials((prevState) => !prevState);
+    setSharingProductName(productName);
+  };
+  const handleOpenPeopleApp = () => {
+    window.location.href = "ms-people://home";
+  };
+
+  const ShareURL = (id) => {
+    return `https://bestie-frontend.vercel.app/profile/${id}`;
+  };
+
 
   return (
     <div>
@@ -309,13 +326,15 @@ function SingleStoreClientSideComponent({ storeData }) {
                   <button
                     onClick={liked ? HandleSubmitUnLike : HandleSubmitLike}
                     className={`flex ${
-                      liked ? "bg-[#9748FF] text-white" : "bg-gray-100 text-gray-800"
+                      liked
+                        ? "bg-[#9748FF] text-white"
+                        : "bg-gray-100 text-gray-800"
                     } rounded-full space-x-1 py-1 px-3 text-[12px]  items-center`}
                   >
                     <AiFillLike />
                     <span>{storeData.likes.length}</span>
                   </button>
-                  <button className="flex bg-gray-100 rounded-full space-x-1 py-1 px-3 text-[12px] text-gray-800 items-center">
+                  <button onClick={() => handleOpenShare(storeData.storeName)} className="flex bg-gray-100 rounded-full space-x-1 py-1 px-3 text-[12px] text-gray-800 items-center">
                     <FaShareNodes /> <span>Share</span>
                   </button>
                   <button className="flex bg-gray-100 rounded-full space-x-1 py-1 px-3 text-[12px] text-gray-800 items-center">
@@ -426,6 +445,128 @@ function SingleStoreClientSideComponent({ storeData }) {
           </div>
         </div>
       </div>
+      {openShareSocials && (
+        <div
+          className="w-full h-screen top-0 absolute left-0 z-50  flex justify-center items-center overflow-y-hidden"
+        >
+          <div
+            className="h-screen bg-black opacity-40 top-0 fixed w-full z-10 overflow-y-hidden"
+            onClick={() => setOpenShareSocials(false)}
+          />
+          <div className="flex items-center bg-[#1b1b1b]  fixed w-[80%] lg:w-[25%]  z-20  rounded-md overflow-y-hidden">
+            <div className="w-full h-full overflow-y-hidden flex flex-col items-center my-6 mx-3">
+              <div className="text-white mt-7 mb-2 flex flex-col items-center w-full">
+                <h6 className="font-bold">Share</h6>
+                <p className="text-[12px]">{sharingProductName}</p>
+                <hr className="w-full h-[0.2px] mt-7" />
+              </div>
+              <div className="flex flex-col justify-center items-center mt-7">
+                <div
+                  onClick={handleOpenPeopleApp}
+                  className="text-white flex flex-col items-center hover:bg-gray-700 duration-500 cursor-pointer p-2 rounded-md"
+                >
+                  <SlPeople size={22} />
+                  <h6 className="text-[12px] mt-2">No contacts? No Problem</h6>
+                  <h5 className="text-[12px] mt-1">
+                    Tap to start adding the most important people to you.
+                  </h5>
+                </div>
+                <div></div>
+              </div>
+              <hr className="w-full h-[0.2px] mt-10" />
+              <div className="grid grid-cols-4 gap-5 mt-10">
+                <FacebookShareButton
+                  className=" flex flex-col items-center"
+                  url={ShareURL(storeData._id)}
+                  quote={"Title or jo bhi aapko likhna ho"}
+                  hashtag={"#portfolio..."}
+                >
+                  <FacebookIcon size={40} round={true} />
+                  <span className="text-[13px] mt-1.5 text-white text-center ">
+                    Facebook
+                  </span>
+                </FacebookShareButton>
+                <WhatsappShareButton
+                  className=" flex flex-col items-center"
+                  url={ShareURL(storeData._id)}
+                  quote={"Title or jo bhi aapko likhna ho"}
+                  hashtag={"#portfolio..."}
+                >
+                  <WhatsappIcon size={40} round={true} />
+                  <span className="text-[13px] mt-1.5 text-white text-center ">
+                    Whatsapp
+                  </span>
+                </WhatsappShareButton>
+                <EmailShareButton
+                  className=" flex flex-col items-center"
+                  url={ShareURL(storeData._id)}
+                  quote={"Title or jo bhi aapko likhna ho"}
+                  hashtag={"#portfolio..."}
+                >
+                  <EmailIcon size={40} round={true} />
+                  <span className="text-[13px] mt-1.5 text-white text-center ">
+                    Email
+                  </span>
+                </EmailShareButton>
+                <TwitterShareButton
+                  className=" flex flex-col items-center"
+                  url={ShareURL(storeData._id)}
+                  quote={"Title or jo bhi aapko likhna ho"}
+                  hashtag={"#portfolio..."}
+                >
+                  <XIcon size={40} round={true} />
+                  <span className="text-[13px] mt-1.5 text-white text-center ">
+                    X
+                  </span>
+                </TwitterShareButton>
+                <TelegramShareButton
+                  className=" flex flex-col items-center"
+                  url={ShareURL(storeData._id)}
+                  quote={"Title or jo bhi aapko likhna ho"}
+                  hashtag={"#portfolio..."}
+                >
+                  <TelegramIcon size={40} round={true} />{" "}
+                  <span className="text-[13px] mt-1.5 text-white text-center ">
+                    Telegram
+                  </span>
+                </TelegramShareButton>
+                <RedditShareButton
+                  className=" flex flex-col items-center"
+                  url={ShareURL(storeData._id)}
+                  quote={"Title or jo bhi aapko likhna ho"}
+                  hashtag={"#portfolio..."}
+                >
+                  <RedditIcon size={40} round={true} />{" "}
+                  <span className="text-[13px] mt-1.5 text-white text-center ">
+                    Reddit
+                  </span>
+                </RedditShareButton>
+                <LinkedinShareButton
+                  className=" flex flex-col items-center"
+                  url={ShareURL(storeData._id)}
+                  quote={"Title or jo bhi aapko likhna ho"}
+                  hashtag={"#portfolio..."}
+                >
+                  <LinkedinIcon size={40} round={true} />{" "}
+                  <span className="text-[13px] mt-1.5 text-white text-center ">
+                    LinkedIn
+                  </span>
+                </LinkedinShareButton>
+              </div>
+              <hr className="w-full h-[0.2px] mt-10" />
+              <div className="mt-1 text-white w-full">
+                <Link
+                  href={"ms-windows-store://home"}
+                  className="flex items-center justify-center space-x-2"
+                >
+                  <SiMicrosoftstore />{" "}
+                  <h5 className="text-[14px] mt-1">Get apps in Store.</h5>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
