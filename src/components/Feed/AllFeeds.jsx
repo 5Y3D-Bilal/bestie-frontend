@@ -313,7 +313,7 @@ function AllFeeds() {
               <div className="grid grid-cols-4 gap-5 mt-10">
                 <FacebookShareButton
                   className=" flex flex-col items-center"
-                  url={`http://localhost:3000/item/${"ewajebh"}`}
+                  url={`https://bestie-frontend.vercel.app/item/${"ewajebh"}`}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -324,7 +324,7 @@ function AllFeeds() {
                 </FacebookShareButton>
                 <WhatsappShareButton
                   className=" flex flex-col items-center"
-                  url={`http://localhost:3000/item/${"ewajebh"}`}
+                  url={`https://bestie-frontend.vercel.app/item/${"ewajebh"}`}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -335,7 +335,7 @@ function AllFeeds() {
                 </WhatsappShareButton>
                 <EmailShareButton
                   className=" flex flex-col items-center"
-                  url={`http://localhost:3000/item/${"ewajebh"}`}
+                  url={`https://bestie-frontend.vercel.app/item/${"ewajebh"}`}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -346,7 +346,7 @@ function AllFeeds() {
                 </EmailShareButton>
                 <TwitterShareButton
                   className=" flex flex-col items-center"
-                  url={`http://localhost:3000/item/${"ewajebh"}`}
+                  url={`https://bestie-frontend.vercel.app/item/${"ewajebh"}`}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -357,7 +357,7 @@ function AllFeeds() {
                 </TwitterShareButton>
                 <TelegramShareButton
                   className=" flex flex-col items-center"
-                  url={`http://localhost:3000/item/${"ewajebh"}`}
+                  url={`https://bestie-frontend.vercel.app/item/${"ewajebh"}`}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -368,7 +368,7 @@ function AllFeeds() {
                 </TelegramShareButton>
                 <RedditShareButton
                   className=" flex flex-col items-center"
-                  url={`http://localhost:3000/item/${"ewajebh"}`}
+                  url={`https://bestie-frontend.vercel.app/item/${"ewajebh"}`}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -379,7 +379,7 @@ function AllFeeds() {
                 </RedditShareButton>
                 <LinkedinShareButton
                   className=" flex flex-col items-center"
-                  url={`http://localhost:3000/item/${"ewajebh"}`}
+                  url={`https://bestie-frontend.vercel.app/item/${"ewajebh"}`}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
