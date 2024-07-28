@@ -21,7 +21,7 @@ import { SiMicrosoftstore } from "react-icons/si";
 const getCurrentUser = async () => {
   const jwtToken = localStorage.getItem("token");
   try {
-    const response = await axios.get("http://localhost:4000/api/currentuser", {
+    const response = await axios.get("https://besty-backend.vercel.app/api/currentuser", {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },
@@ -170,7 +170,7 @@ function SingleStoreClientSideComponent({ storeData }) {
     setIsFollowing(true);
     try {
       const response = await axios.put(
-        "ttp://localhost:4000/api/store/follow",
+        "https://besty-backend.vercel.app/api/store/follow",
         {
           id: currentUser.id,
           storeId: storeData._id,
@@ -189,7 +189,7 @@ function SingleStoreClientSideComponent({ storeData }) {
     setIsFollowing(false);
     try {
       const response = await axios.put(
-        "ttp://localhost:4000/api/store/unfollow",
+        "https://besty-backend.vercel.app/api/store/unfollow",
         {
           id: currentUser.id,
           storeId: storeData._id,
@@ -208,7 +208,7 @@ function SingleStoreClientSideComponent({ storeData }) {
     setLiked(true);
     try {
       const response = await axios.put(
-        "ttp://localhost:4000/api/store/like",
+        "https://besty-backend.vercel.app/api/store/like",
         {
           id: currentUser.id,
           storeId: storeData._id,
@@ -227,7 +227,7 @@ function SingleStoreClientSideComponent({ storeData }) {
     setLiked(false);
     try {
       const response = await axios.put(
-        "ttp://localhost:4000/api/store/unlike",
+        "https://besty-backend.vercel.app/api/store/unlike",
         {
           id: currentUser.id,
           storeId: storeData._id,
