@@ -58,7 +58,7 @@ function Navbar() {
                 <NavMobile />
               </div>
               <Link href={"/"} className="flex items-center">
-                <div className="border-white border-[6px] relative rounded-full w-[40px] h-[40px] lg:w-[60px] lg:h-[60px]">
+                <div className="border-white border-[6px] relative rounded-full w-[50px] h-[50px] lg:w-[60px] lg:h-[60px]">
                   <Image
                     src={logo}
                     alt="user profile image"
@@ -69,7 +69,7 @@ function Navbar() {
                     priority
                   />
                 </div>
-                <span className="text-[21px] font-bold" style={{fontStyle: 'italic'}}>Bestie</span>
+                <span className="text-[21px] font-bold lg:block hidden" style={{fontStyle: 'italic'}}>Bestie</span>
               </Link>
             </div>
             <div className="flex items-center space-x-3">
