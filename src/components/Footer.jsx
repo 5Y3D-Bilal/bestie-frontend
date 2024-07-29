@@ -13,10 +13,11 @@ function Footer() {
           <div className="w-2/4">
             <Image
               src="/logo.png"
-              width="120"
-              height="120"
+              width="80"
+              height="80"
               alt="SiteLogo"
               priority
+              className="rounded-full"
             />
           </div>
           <div className="mt-5 flex flex-col space-y-3 w-1/2">

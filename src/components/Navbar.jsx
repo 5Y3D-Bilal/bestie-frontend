@@ -51,14 +51,14 @@ function Navbar() {
   return (
     <>
       <nav className="py-1 bg-white lg:mx-auto z-50 fixed top-0 w-full">
-        <div className="max-w-6xl lg:mx-auto mx-5">
+        <div className="max-w-6xl lg:mx-auto mx-5 py-2">
           <div className="flex justify-between items-center  py-1 ">
             <div className="flex items-center">
               <div className="lg:hidden block">
                 <NavMobile />
               </div>
-              <Link href={"/"}>
-                <div className="border-white border-[6px] relative rounded-full w-[80px] h-[80px] lg:w-[100px] lg:h-[100px]">
+              <Link href={"/"} className="flex items-center">
+                <div className="border-white border-[6px] relative rounded-full w-[80px] h-[80px] lg:w-[60px] lg:h-[60px]">
                   <Image
                     src={logo}
                     alt="user profile image"
@@ -69,6 +69,7 @@ function Navbar() {
                     priority
                   />
                 </div>
+                <span className="text-[20px] font-bold" style={{fontStyle: 'oblique'}}>Bestie</span>
               </Link>
             </div>
             <div className="flex items-center space-x-3">
