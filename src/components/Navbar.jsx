@@ -69,7 +69,7 @@ function Navbar() {
                     priority
                   />
                 </div>
-                <span className="text-[20px] font-bold" style={{fontStyle: 'oblique'}}>Bestie</span>
+                <span className="text-[20px] font-bold" style={{fontStyle: 'italic'}}>Bestie</span>
               </Link>
             </div>
             <div className="flex items-center space-x-3">
