@@ -58,7 +58,7 @@ function Navbar() {
                 <NavMobile />
               </div>
               <Link href={"/"} className="flex items-center">
-                <div className="border-white border-[6px] relative rounded-full w-[80px] h-[80px] lg:w-[60px] lg:h-[60px]">
+                <div className="border-white border-[6px] relative rounded-full w-[40px] h-[40px] lg:w-[60px] lg:h-[60px]">
                   <Image
                     src={logo}
                     alt="user profile image"
