@@ -247,7 +247,7 @@ function StoreClientSideComponent({ storesData, verifiedStores }) {
 
   return (
     <div className="max-w-6xl mx-auto mt-[5rem] lg:mt-[7.5rem]">
-      <div className="bg-white z-10 py-5 mb-2 space-x-3 flex px-5 lg:px-10 justify-between sticky top-[80px] lg:top-[110px] overflow-x-auto overflow-y-hidden ">
+      <div className="bg-white z-10 py-5 mb-2 space-x-3 flex px-5 lg:px-10 justify-between sticky top-[80px] lg:top-[90px] overflow-x-auto overflow-y-hidden ">
         {/* Cities Filter */}
         <div className="lg:block hidden w-1/4">
           <form className="w-full mx-auto">
