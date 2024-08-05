@@ -2,6 +2,8 @@ import React from "react";
 import axios from "axios";
 import UserClientSide from "../../../../components/User/UserClientSide";
 
+
+
 // SSR RENDERING FOR GETTING LOGINED USER DATA
 const getUser = async (id) => {
   try {
@@ -18,9 +20,16 @@ const getUser = async (id) => {
   }
 };
 
+export async function generateMetadata({ params }) {
+  const userData = await getUser(params.id);
+  return {
+    title: userData.username,
+  };
+}
+
 async function page({ params }) {
   const userData = await getUser(params.id);
-
+  
   return (
     <div>
       <UserClientSide userData={userData} />

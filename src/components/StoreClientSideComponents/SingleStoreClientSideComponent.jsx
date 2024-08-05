@@ -15,7 +15,22 @@ import { FaLocationDot } from "react-icons/fa6";
 import { RiErrorWarningLine } from "react-icons/ri";
 import { IoCallOutline } from "react-icons/io5";
 import { SlPeople } from "react-icons/sl";
-import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, RedditIcon, RedditShareButton, TelegramIcon, TelegramShareButton, TwitterShareButton, WhatsappIcon, WhatsappShareButton, XIcon } from "react-share";
+import {
+  EmailIcon,
+  EmailShareButton,
+  FacebookIcon,
+  FacebookShareButton,
+  LinkedinIcon,
+  LinkedinShareButton,
+  RedditIcon,
+  RedditShareButton,
+  TelegramIcon,
+  TelegramShareButton,
+  TwitterShareButton,
+  WhatsappIcon,
+  WhatsappShareButton,
+  XIcon,
+} from "react-share";
 import { SiMicrosoftstore } from "react-icons/si";
 
 const getCurrentUser = async () => {
@@ -35,7 +50,8 @@ const getCurrentUser = async () => {
   }
 };
 
-function SingleStoreClientSideComponent({ storeData }) {
+function SingleStoreClientSideComponent({ storeData, storeProduct }) {
+  console.log(storeProduct);
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState(null);
   const [isFollowing, setIsFollowing] = useState(false);
@@ -126,14 +142,14 @@ function SingleStoreClientSideComponent({ storeData }) {
     },
   ];
   const [searchTerm, setSearchTerm] = useState("");
-  const [results, setResults] = useState(modileProducts);
+  const [results, setResults] = useState(storeProduct);
   const joinData = moment(storeData.createdAt).format("MMMM YYYY");
 
   function getTimeFromNow(dateString) {
     const timestamp = moment(dateString).valueOf(); // Convert to timestamp
     const now = moment(); // Current time
     const timeFromNow = moment.duration(now.diff(timestamp)); // Calculate the difference
-
+  
     if (timeFromNow.asSeconds() < 60) {
       return `${Math.floor(timeFromNow.asSeconds())} seconds ago`;
     } else if (timeFromNow.asMinutes() < 60) {
@@ -150,15 +166,16 @@ function SingleStoreClientSideComponent({ storeData }) {
       return `${Math.floor(timeFromNow.asYears())} years ago`;
     }
   }
-
-  const dateString = storeData.createdAt;
+  
+  // Assuming storeProduct is an array of products with a createdAt property
+  // const timeArray = storeProduct.map((i) => getTimeFromNow(i.createdAt));
 
   const searchQueryFunction = (e) => {
     e.preventDefault();
 
     function searchByName(name) {
-      return modileProducts.filter((product) =>
-        product.name.toLowerCase().includes(name.toLowerCase())
+      return storeProduct.filter((product) =>
+        product.productName.toLowerCase().includes(name.toLowerCase())
       );
     }
 
@@ -255,7 +272,6 @@ function SingleStoreClientSideComponent({ storeData }) {
     return `https://bestie-frontend.vercel.app/profile/${id}`;
   };
 
-
   return (
     <div>
       <div className="flex justify-between space-x-10">
@@ -334,7 +350,10 @@ function SingleStoreClientSideComponent({ storeData }) {
                     <AiFillLike />
                     <span>{storeData.likes.length}</span>
                   </button>
-                  <button onClick={() => handleOpenShare(storeData.storeName)} className="flex bg-gray-100 rounded-full space-x-1 py-1 px-3 text-[12px] text-gray-800 items-center">
+                  <button
+                    onClick={() => handleOpenShare(storeData.storeName)}
+                    className="flex bg-gray-100 rounded-full space-x-1 py-1 px-3 text-[12px] text-gray-800 items-center"
+                  >
                     <FaShareNodes /> <span>Share</span>
                   </button>
                   <button className="flex bg-gray-100 rounded-full space-x-1 py-1 px-3 text-[12px] text-gray-800 items-center">
@@ -364,41 +383,35 @@ function SingleStoreClientSideComponent({ storeData }) {
               </div>
               <hr className="lg:my-7 my-5" />
               <div className="mx-5 lg:mx-10 mb-10 grid lg:grid-cols-3 grid-cols-1 md:grid-cols-2 gap-y-3 md:gap-3">
-                {storeData.publishedProducts.length === 0 ? (
-                  <>
-                    {results.map((item) => (
-                      <div
-                        className="border-gray-400 border-[0.5px] w-full lg:w-[230px] rounded-md "
-                        key={item.id}
-                      >
-                        <Link href={`/item/${item.id}`}>
-                          <div className="relative w-full h-[200px]">
-                            <Image
-                              src={item.image}
-                              alt={item.name}
-                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                              className="w-full rounded-t-md "
-                              fill
-                              style={{ objectFit: "cover" }}
-                            />
-                          </div>
-                        </Link>
-                        <div className="p-3">
-                          <h1 className="text-gray-900 font-extrabold text-[25px]">
-                            Rs {item.price}
-                          </h1>
-                          <h2 className="text-gray-800 mt-1">{item.name}</h2>
-                          <div className="pb-3 pt-5 flex justify-between">
-                            <h1 className="text-gray-800">{item.city}</h1>
-                            <h2 className="text-gray-800">{item.date}</h2>
-                          </div>
-                        </div>
+                {results.map((item) => (
+                  <div
+                    className="border-gray-400 border-[0.5px] w-full lg:w-[230px] rounded-md "
+                    key={item.id}
+                  >
+                    <Link href={`/item/${item._id}`}>
+                      <div className="relative w-full h-[200px]">
+                        <Image
+                          src={item.productImages[0]}
+                          alt={item.productName}
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          className="w-full rounded-t-md "
+                          fill
+                          style={{ objectFit: "cover" }}
+                        />
                       </div>
-                    ))}
-                  </>
-                ) : (
-                  "e"
-                )}
+                    </Link>
+                    <div className="p-3">
+                      <h1 className="text-gray-900 font-extrabold text-[25px]">
+                        Rs {item.productPrice}
+                      </h1>
+                      <h2 className="text-gray-800 mt-1">{item.productName}</h2>
+                      <div className="pb-3 pt-5 flex justify-between">
+                        <h1 className="text-gray-800 truncate w-1/2">{item.sellerLocation}</h1>
+                        <h2 className="text-gray-800">{getTimeFromNow(item.createdAt)}</h2>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -409,7 +422,7 @@ function SingleStoreClientSideComponent({ storeData }) {
               <h2 className="text-gray-800 font-bold text-xl">
                 Contact Seller
               </h2>
-              <div className="text-sm mt-2 bg-[#9748FF] flex items-center text-white py-4 cursor-pointer hover:border-[#9748FF] hover:border-[0.5px] animate-pulse hover:animate-none hover:bg-white duration-200 hover:text-black px-4 rounded-lg space-x-2">
+              <div className="text-sm mt-2 bg-[#9748FF] flex items-center justify-center text-white py-4 cursor-pointer hover:border-[#9748FF] hover:border-[0.5px] animate-pulse hover:animate-none hover:bg-white duration-200 hover:text-black px-4 rounded-lg space-x-2">
                 <IoCallOutline size={25} />{" "}
                 <span className="text-[17px]"> Show Phone Number</span>
               </div>
@@ -446,9 +459,7 @@ function SingleStoreClientSideComponent({ storeData }) {
         </div>
       </div>
       {openShareSocials && (
-        <div
-          className="w-full h-screen top-0 absolute left-0 z-50  flex justify-center items-center overflow-y-hidden"
-        >
+        <div className="w-full h-screen top-0 absolute left-0 z-50  flex justify-center items-center overflow-y-hidden">
           <div
             className="h-screen bg-black opacity-40 top-0 fixed w-full z-10 overflow-y-hidden"
             onClick={() => setOpenShareSocials(false)}

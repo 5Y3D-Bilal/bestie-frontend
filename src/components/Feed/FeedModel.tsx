@@ -8,15 +8,17 @@ import CurrentUserFeeds from './CurrentUserFeeds'
 
 type StoreModelProps = {
   storesData: any;
+  allProducts: any
+  storeData: any
 };
 
-const FeedModel: React.FC<StoreModelProps> = ({ storesData }) => {
+const FeedModel: React.FC<StoreModelProps> = ({ storesData , allProducts, storeData}) => {
   const FeedModel = useRecoilValue(StoreModel);
   return (
     <>
       <div className="w-full">
         {FeedModel.type === "allFeeds" ? (
-          <AllFeeds />
+          <AllFeeds allProducts={allProducts} storeData={storeData} />
         ) : FeedModel.type === "followings" ? (
           <Followings />
         ) : FeedModel.type === "currentUser" ? (

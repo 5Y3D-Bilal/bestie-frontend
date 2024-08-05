@@ -20,15 +20,24 @@ const getAllStores = async () => {
 // SSR RENDERING FOR GETTING ALL STORES
 const getAllVerifiedStores = async () => {
   try {
-    const res = await axios.get('https://besty-backend.vercel.app/api/stores/verified', {
-      withCredentials: true,
-    });
+    const res = await axios.get(
+      "https://besty-backend.vercel.app/api/stores/verified",
+      {
+        withCredentials: true,
+      }
+    );
     return res.data;
   } catch (error) {
-    console.error('Error fetching stores:', error);
+    console.error("Error fetching stores:", error);
     throw error;
   }
 };
+
+export async function generateMetadata() {
+  return {
+    title: "Store",
+  };
+}
 
 async function Stores() {
   const storesData = await getAllStores();

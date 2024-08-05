@@ -1,4 +1,5 @@
 "use client";
+import moment from "moment";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
@@ -27,88 +28,31 @@ import {
   XIcon,
 } from "react-share";
 
-function AllFeeds() {
-  const modileProducts = [
-    {
-      id: 1,
-      name: "Galaxy S21",
-      model: "SM-G991B",
-      price: 799.99,
-      city: "Lahore",
-      image:
-        "https://www.cnet.com/a/img/resize/7f200ddcfc7e2e3b2e5fabdb62050058f6f00b25/hub/2021/01/14/6d35fb74-a413-4726-9668-e2fc754f44cb/samsung-galaxy-s21-06173.jpg?auto=webp&fit=crop&height=1200&width=1200",
-      date: "2021-01-29",
-      description:
-        "The Galaxy S21 features a 6.2-inch display, triple rear cameras, and the Exynos 2100 processor.",
-    },
-    {
-      name: "iPhone 13",
-      id: 2,
-      model: "A2633",
-      price: 899.0,
-      date: "2021-09-24",
-      city: "Lahore",
-      image:
-        "https://static-01.daraz.pk/p/d897087a1022be8d2b368903f2470ad0.jpg_750x750.jpg_.webp",
-      description:
-        "iPhone 13 offers a new design, improved cameras, and the powerful A15 Bionic chip.",
-    },
-    {
-      id: 3,
-      name: "Pixel 6",
-      model: "GA01341-US",
-      price: 599.0,
-      city: "Lahore",
-      date: "2021-10-28",
-      image:
-        "https://mobiletrade.pk/wp-content/uploads/2023/12/Pixel-6-Pro-2.jpg.webp",
-      description:
-        "Google Pixel 6 comes with a 6.4-inch display, Google Tensor processor, and advanced camera features.",
-    },
-    {
-      id: 4,
-      name: "Pixel 6",
-      model: "GA01341-US",
-      price: 599.0,
-      city: "Lahore",
-      date: "2021-10-28",
-      image:
-        "https://mobiletrade.pk/wp-content/uploads/2023/12/Pixel-6-Pro-2.jpg.webp",
-      description:
-        "Google Pixel 6 comes with a 6.4-inch display, Google Tensor processor, and advanced camera features.",
-    },
-    {
-      id: 5,
-      name: "Pixel 6",
-      model: "GA01341-US",
-      price: 599.0,
-      city: "Lahore",
-      date: "2021-10-28",
-      image:
-        "https://mobiletrade.pk/wp-content/uploads/2023/12/Pixel-6-Pro-2.jpg.webp",
-      description:
-        "Google Pixel 6 comes with a 6.4-inch display, Google Tensor processor, and advanced camera features.",
-    },
-    {
-      id: 6,
-      name: "Pixel 6",
-      model: "GA01341-US",
-      price: 599.0,
-      city: "Lahore",
-      date: "2021-10-28",
-      image:
-        "https://mobiletrade.pk/wp-content/uploads/2023/12/Pixel-6-Pro-2.jpg.webp",
-      description:
-        "Google Pixel 6 comes with a 6.4-inch display, Google Tensor processor, and advanced camera features.",
-    },
-  ];
+const getUser = async (id) => {
+  const Feeds = await allProducts();
+  try {
+    const res = await axios.post(
+      "https://besty-backend.vercel.app/api/storeBody",
+      { storeId: id },
+      {
+        withCredentials: true,
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching stores:", error);
+    throw error;
+  }
+};
+
+function AllFeeds({ allProducts, storeData }) {
+  console.log(storeData)
   const [openBannerImageUploader, setOpenBannerImageUploader] = useState(false);
   const [showImage, setShowImage] = useState(false);
   const handleToggleBanner = (image) => {
     setOpenBannerImageUploader((prevState) => !prevState);
     setShowImage(image);
   };
-
   const [openShareSocials, setOpenShareSocials] = useState(false);
   const [sharingProductName, setSharingProductName] = useState("");
   const handleOpenShare = (productName) => {
@@ -163,35 +107,49 @@ function AllFeeds() {
   }, []);
 
   const handleOpenPeopleApp = () => {
-    window.location.href = 'ms-people://home';
+    window.location.href = "ms-people://home";
   };
 
   const ShareURL = (id) => {
-    return `https://bestie-frontend.vercel.app/item/${id}`
-  }
-
+    return `https://bestie-frontend.vercel.app/item/${id}`;
+  };
   return (
     <>
-      {modileProducts.map((item) => (
-        <div key={item.id} className="border-gray-400 border-[0.5px] w-full p-5 mb-5  lg:w-full rounded-md">
+      {allProducts.map((item) => (
+        <div
+          key={item._id}
+          className="border-gray-400 border-[0.5px] w-full p-5 mb-5  lg:w-full rounded-md"
+        >
           <div className="flex justify-between mb-5 items-center">
             <div className="flex items-center  space-x-2">
               <div className="flex items-center">
-                <div className="border-white border-[6px] relative rounded-full w-[20px] h-[20px] lg:w-[50px] lg:h-[50px]">
-                  <Image
-                    src={item.image}
-                    alt="UserProfileImage"
-                    style={{ objectFit: "cover" }}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 10vw"
-                    className="rounded-full"
-                    priority
-                  />
+                <div className="border-white border-[6px] relative rounded-full w-[40px] h-[40px] lg:w-[50px] lg:h-[50px]">
+                  {storeData.map(
+                    (i) =>
+                      i._id === item.storeId && (
+                        <Image
+                          src={i.storeLogo}
+                          alt="UserProfileImage"
+                          style={{ objectFit: "cover" }}
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 10vw"
+                          className="rounded-full"
+                          priority
+                        />
+                      )
+                  )}
                 </div>
 
                 <div className="">
-                  <h4 className="text-[17px]">{item.name}</h4>
-                  <h6 className="text-[14px]">{item.date}</h6>
+                  {storeData.map(
+                    (storeData) =>
+                      storeData._id === item.storeId && (
+                        <h4 className="text-[17px]">{storeData.storeName}</h4>
+                      )
+                  )}
+                  <h6 className="text-[14px]">
+                    {moment(item.createdAt).format("DD MMMM YYYY")}
+                  </h6>
                 </div>
               </div>
             </div>
@@ -200,8 +158,8 @@ function AllFeeds() {
           <div className="" key={item._id}>
             <div className="relative w-full h-[440px]">
               <Image
-                src={item.image}
-                onClick={() => handleToggleBanner(item.image)}
+                src={item.productImages[0]}
+                onClick={() => handleToggleBanner(item.productImages[0])}
                 alt="Store Logo"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="w-full rounded-md cursor-pointer"
@@ -212,12 +170,12 @@ function AllFeeds() {
             <div className="mt-3">
               <div>
                 <Link
-                  href={"/"}
+                  href={`/item/${item._id}`}
                   className="flex items-center bg-gray-100 rounded-md p-2 space-x-3"
                 >
                   <div className=" relative rounded-full w-[20px] h-[20px] lg:w-[50px] lg:h-[50px]">
                     <Image
-                      src={item.image}
+                      src={item.productImages[0]}
                       alt="UserProfileImage"
                       style={{ objectFit: "cover" }}
                       fill
@@ -227,16 +185,20 @@ function AllFeeds() {
                     />
                   </div>
                   <div className="text-[12px]">
-                    <h6 className="font-bold">{item.name}</h6>
-                    <h6 className="font-bold text-red-600">Rs {item.price}</h6>
+                    <h6 className="font-bold">{item.productName}</h6>
+                    <h6 className="font-bold text-red-600">
+                      Rs {item.productPrice}
+                    </h6>
                     <div className="flex items-center space-x-1">
-                      <FaLocationDot /> <span>{item.city}</span>
+                      <FaLocationDot /> <span>{item.sellerLocation}</span>
                     </div>
                   </div>
                 </Link>
-                <p className="lg:mt-1 mt-5">{item.description}</p>
+                <p className="lg:mt-2 mt-2 text-[12px] lg:text-[16px]">
+                  {item.productDescription}
+                </p>
               </div>
-              <div className="mt-10">
+              <div className="mt-2">
                 <hr />
                 <div className="flex justify-between  w-full items-center py-3 text-gray-800 text-[14px]">
                   <div className="flex items-center space-x-1 cursor-pointer">
@@ -310,18 +272,23 @@ function AllFeeds() {
                 <hr className="w-full h-[0.2px] mt-7" />
               </div>
               <div className="flex flex-col justify-center items-center mt-7">
-                <div onClick={handleOpenPeopleApp} className="text-white flex flex-col items-center hover:bg-gray-700 duration-500 cursor-pointer p-2 rounded-md">
+                <div
+                  onClick={handleOpenPeopleApp}
+                  className="text-white flex flex-col items-center hover:bg-gray-700 duration-500 cursor-pointer p-2 rounded-md"
+                >
                   <SlPeople size={22} />
                   <h6 className="text-[12px] mt-2">No contacts? No Problem</h6>
-                  <h5 className="text-[12px] mt-1">Tap to start adding the most important people to you.</h5>
-                </div >
+                  <h5 className="text-[12px] mt-1">
+                    Tap to start adding the most important people to you.
+                  </h5>
+                </div>
                 <div></div>
               </div>
               <hr className="w-full h-[0.2px] mt-10" />
               <div className="grid grid-cols-4 gap-5 mt-10">
                 <FacebookShareButton
                   className=" flex flex-col items-center"
-                  url={ShareURL('eaweae')}
+                  url={ShareURL("eaweae")}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -332,7 +299,7 @@ function AllFeeds() {
                 </FacebookShareButton>
                 <WhatsappShareButton
                   className=" flex flex-col items-center"
-                  url={ShareURL('eaweae')}
+                  url={ShareURL("eaweae")}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -343,7 +310,7 @@ function AllFeeds() {
                 </WhatsappShareButton>
                 <EmailShareButton
                   className=" flex flex-col items-center"
-                  url={ShareURL('eaweae')}
+                  url={ShareURL("eaweae")}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -354,7 +321,7 @@ function AllFeeds() {
                 </EmailShareButton>
                 <TwitterShareButton
                   className=" flex flex-col items-center"
-                  url={ShareURL('eaweae')}
+                  url={ShareURL("eaweae")}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -365,7 +332,7 @@ function AllFeeds() {
                 </TwitterShareButton>
                 <TelegramShareButton
                   className=" flex flex-col items-center"
-                  url={ShareURL('eaweae')}
+                  url={ShareURL("eaweae")}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -376,7 +343,7 @@ function AllFeeds() {
                 </TelegramShareButton>
                 <RedditShareButton
                   className=" flex flex-col items-center"
-                  url={ShareURL('eaweae')}
+                  url={ShareURL("eaweae")}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -387,7 +354,7 @@ function AllFeeds() {
                 </RedditShareButton>
                 <LinkedinShareButton
                   className=" flex flex-col items-center"
-                  url={ShareURL('eaweae')}
+                  url={ShareURL("eaweae")}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -399,7 +366,13 @@ function AllFeeds() {
               </div>
               <hr className="w-full h-[0.2px] mt-10" />
               <div className="mt-1 text-white w-full">
-                <Link href={'ms-windows-store://home'} className="flex items-center justify-center space-x-2"><SiMicrosoftstore /> <h5 className="text-[14px] mt-1">Get apps in Store.</h5></Link>
+                <Link
+                  href={"ms-windows-store://home"}
+                  className="flex items-center justify-center space-x-2"
+                >
+                  <SiMicrosoftstore />{" "}
+                  <h5 className="text-[14px] mt-1">Get apps in Store.</h5>
+                </Link>
               </div>
             </div>
           </div>

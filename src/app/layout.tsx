@@ -10,8 +10,10 @@ const inter = Roboto({
 });
 
 export const metadata: Metadata = {
-  title:
-    "Bestie - Your Trusted Online Marketplace for Buying and Selling Anything",
+  title: {
+    default: "Bestie - Your Trusted Online Marketplace for Buying and Selling Anything",
+    template: "%s | Bestie"
+  },
   description: "Besty is your friend. Buy anything here with trust.",
   metadataBase: new URL("https://bestie-frontend.vercel.app"),
   keywords: [

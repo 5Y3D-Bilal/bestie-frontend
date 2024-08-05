@@ -69,19 +69,27 @@ function Navbar() {
                     priority
                   />
                 </div>
-                <span className="text-[21px] font-bold lg:block hidden" style={{fontStyle: 'italic'}}>Bestie</span>
+                <span
+                  className="text-[21px] font-bold lg:block hidden"
+                  style={{ fontStyle: "italic" }}
+                >
+                  Bestie
+                </span>
               </Link>
             </div>
             <div className="flex items-center space-x-3">
               <div>
                 <div className="lg:flex items-center space-x-4 hidden">
                   {navLinks.map((item) => {
-                    const isActive = pathName.startsWith(item.href);
+                    const isActive =
+                      item.href === "/"
+                        ? pathName === item.href
+                        : pathName.startsWith(item.href);
                     return (
                       <Link
                         key={item.name}
                         className={`cursor-pointer ${
-                          isActive && "text-[#9748FF]"
+                          isActive ? "text-[#9748FF]" : ""
                         } font-semibold leading-4`}
                         href={item.href}
                       >

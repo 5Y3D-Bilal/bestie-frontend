@@ -39,7 +39,7 @@ const getCurrentUser = async () => {
   }
 };
 
-function FeedClientSideComponent({ storesData }) {
+function FeedClientSideComponent({ storesData, allProducts, storeData }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [followedStoresData, setFollowedStoresData] = useState([]);
   useEffect(() => {
@@ -72,10 +72,22 @@ function FeedClientSideComponent({ storesData }) {
             <div className=" mb-4">
               <div className="border-[0.5px] flex space-x-3 items-center border-gray-300 py-4 px-3 rounded-lg">
                 <div className="flex items-center space-x-3">
-                  <button onClick={() => ChangeSetAuthModleType('allFeeds')} className={`py-2 px-5 rounded-full border-[2px] hover:bg-[#6f00ff] border-[#6f00ff] bg-[#eddfff] hover:text-white duration-500 text-[#9748FF] ${feedsState.type === 'allFeeds' && 'bg-[#7827e2] text-white'}`}>
+                  <button
+                    onClick={() => ChangeSetAuthModleType("allFeeds")}
+                    className={`py-2 px-5 rounded-full border-[2px] hover:bg-[#6f00ff] border-[#6f00ff] bg-[#eddfff] hover:text-white duration-500 text-[#9748FF] ${
+                      feedsState.type === "allFeeds" &&
+                      "bg-[#7827e2] text-white"
+                    }`}
+                  >
                     All Feed
                   </button>
-                  <button onClick={() => ChangeSetAuthModleType('followings')} className={`py-2 px-5 rounded-full border-[2px] hover:bg-[#6f00ff] border-[#6f00ff] bg-[#eddfff] hover:text-white duration-500 text-[#9748FF] ${feedsState.type === 'followings' && 'bg-[#7827e2] text-white'}`}>
+                  <button
+                    onClick={() => ChangeSetAuthModleType("followings")}
+                    className={`py-2 px-5 rounded-full border-[2px] hover:bg-[#6f00ff] border-[#6f00ff] bg-[#eddfff] hover:text-white duration-500 text-[#9748FF] ${
+                      feedsState.type === "followings" &&
+                      "bg-[#7827e2] text-white"
+                    }`}
+                  >
                     Following
                   </button>
                 </div>
@@ -120,7 +132,11 @@ function FeedClientSideComponent({ storesData }) {
           </div>
           <div className="w-full mx-5 lg:mx-0 lg:w-1/2 mb-10">
             <div className="grid lg:grid-cols-1 ">
-              <FeedModel storesData={storesData} />
+              <FeedModel
+                storesData={storesData}
+                allProducts={allProducts}
+                storeData={storeData}
+              />
             </div>
           </div>
           <div className="lg:block hidden w-[22%] sticky top-[130px] overflow-x-auto overflow-y-hidden h-[100%]">
@@ -139,7 +155,7 @@ function FeedClientSideComponent({ storesData }) {
                     />
                   </div>
                   <div
-                    onClick={() => ChangeSetAuthModleType('currentUser')}
+                    onClick={() => ChangeSetAuthModleType("currentUser")}
                     className="flex items-center space-x-2 group cursor-pointer"
                   >
                     <span>Profile</span>{" "}
