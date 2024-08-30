@@ -149,7 +149,7 @@ function SingleStoreClientSideComponent({ storeData, storeProduct }) {
     const timestamp = moment(dateString).valueOf(); // Convert to timestamp
     const now = moment(); // Current time
     const timeFromNow = moment.duration(now.diff(timestamp)); // Calculate the difference
-  
+
     if (timeFromNow.asSeconds() < 60) {
       return `${Math.floor(timeFromNow.asSeconds())} seconds ago`;
     } else if (timeFromNow.asMinutes() < 60) {
@@ -166,7 +166,7 @@ function SingleStoreClientSideComponent({ storeData, storeProduct }) {
       return `${Math.floor(timeFromNow.asYears())} years ago`;
     }
   }
-  
+
   // Assuming storeProduct is an array of products with a createdAt property
   // const timeArray = storeProduct.map((i) => getTimeFromNow(i.createdAt));
 
@@ -402,12 +402,20 @@ function SingleStoreClientSideComponent({ storeData, storeProduct }) {
                     </Link>
                     <div className="p-3">
                       <h1 className="text-gray-900 font-extrabold text-[25px]">
-                        Rs {item.productPrice}
+                        Rs{" "}
+                        {item.productPrice.toLocaleString("en-PK", {
+                          currency: "PKR",
+                          minimumFractionDigits: 0,
+                        })}
                       </h1>
                       <h2 className="text-gray-800 mt-1">{item.productName}</h2>
                       <div className="pb-3 pt-5 flex justify-between">
-                        <h1 className="text-gray-800 truncate w-1/2">{item.sellerLocation}</h1>
-                        <h2 className="text-gray-800">{getTimeFromNow(item.createdAt)}</h2>
+                        <h1 className="text-gray-800 truncate w-1/2">
+                          {item.sellerLocation}
+                        </h1>
+                        <h2 className="text-gray-800">
+                          {getTimeFromNow(item.createdAt)}
+                        </h2>
                       </div>
                     </div>
                   </div>

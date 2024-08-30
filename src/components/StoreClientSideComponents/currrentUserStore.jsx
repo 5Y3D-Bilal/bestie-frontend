@@ -234,7 +234,7 @@ function CurrrentUserStore({ storeData }) {
                         />
                       </div>
                     ) : (
-                      <div className="w-full h-[350px] bg-[#9748FF] rounded-t-lg flex justify-end items-end">
+                      <div className="w-full h-[350px] bg-[#q] rounded-t-lg flex justify-end items-end">
                         <MdEdit
                           onClick={handleToggleBanner}
                           color="#9748FF"

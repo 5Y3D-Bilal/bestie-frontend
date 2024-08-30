@@ -87,7 +87,7 @@ function Account({ UserData }) {
   return (
     <>
       <div className="max-w-5xl mx-auto">
-        <div className="flex flex-col items-center justify-center lg:justify-start">
+        <div className="flex flex-col items-center ">
           {UserData.profileBanner ? (
             <div className="relative w-[100%] h-[100px] lg:h-[200px] flex justify-end items-end rounded-b-2xl">
               <Image

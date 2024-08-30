@@ -66,12 +66,13 @@ const getUserStore = async (id) => {
   }
 };
 
-function CurrentUserFeeds() {
+function CurrentUserFeeds({ logginedUserStoreProductData }) {
+  console.log(logginedUserStoreProductData);
   const [isFollowing, setIsFollowing] = useState(false);
   const [liked, setLiked] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
-  const [storeId, setStoreId] = useState('');
-  const [productId, setProductId] = useState('');
+  const [storeId, setStoreId] = useState("");
+  const [productId, setProductId] = useState("");
   const [storeData, setStoreData] = useState(null);
   const modileProducts = [
     {
@@ -186,16 +187,16 @@ function CurrentUserFeeds() {
 
   const [openItemShareSocials, setOpenItemShareSocials] = useState(false);
   const [sharingProductName, setSharingProductName] = useState("");
-  const handleOpenShare = (productName , productId) => {
+  const handleOpenShare = (productName, productId) => {
     setOpenItemShareSocials((prevState) => !prevState);
-    setProductId(productId)
+    setProductId(productId);
     setSharingProductName(productName);
   };
 
   const [openShareProfileSocials, setOpenShareProfileSocials] = useState(false);
   const handleProfileShare = (productName, storeId) => {
     setOpenShareProfileSocials((prevState) => !prevState);
-    setStoreId(storeId)
+    setStoreId(storeId);
     setSharingProductName(productName);
   };
 
@@ -315,7 +316,9 @@ function CurrentUserFeeds() {
                   <span>{storeData.likes.length}</span>
                 </button>
                 <button
-                  onClick={() => handleProfileShare(storeData.storeName, storeData._id)}
+                  onClick={() =>
+                    handleProfileShare(storeData.storeName, storeData._id)
+                  }
                   className="flex bg-gray-100 rounded-full space-x-1 py-1 px-3 text-[12px] text-gray-800 items-center"
                 >
                   <FaShareNodes /> <span>Share</span>
@@ -349,30 +352,35 @@ function CurrentUserFeeds() {
         </div>
       ))}
       <div className="mt-5">
-        {modileProducts.map((item) => (
+        {logginedUserStoreProductData.map((item) => (
           <div
-            key={item.id}
+            key={item._id}
             className="border-gray-400 border-[0.5px] w-full p-5 mb-5 h-[760px] lg:w-full rounded-md"
           >
             <div className="flex justify-between mb-5 items-center">
               <div className="flex items-center  space-x-2">
                 <div className="flex items-center">
-                  <div className="border-white border-[6px] relative rounded-full w-[20px] h-[20px] lg:w-[50px] lg:h-[50px]">
-                    <Image
-                      src={item.image}
-                      alt="UserProfileImage"
-                      style={{ objectFit: "cover" }}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 10vw"
-                      className="rounded-full"
-                      priority
-                    />
-                  </div>
-
-                  <div className="">
-                    <h4 className="text-[17px]">{item.name}</h4>
-                    <h6 className="text-[14px]">{item.date}</h6>
-                  </div>
+                  {storeData?.map((i) => (
+                    <div className="border-white border-[6px] relative rounded-full w-[20px] h-[20px] lg:w-[50px] lg:h-[50px]">
+                      <Image
+                        src={i.storeLogo}
+                        alt="UserProfileImage"
+                        style={{ objectFit: "cover" }}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 10vw"
+                        className="rounded-full"
+                        priority
+                      />
+                    </div>
+                  ))}
+                  {storeData?.map((i) => (
+                    <div className="">
+                      <h4 className="text-[17px]">{i.storeName}</h4>
+                      <h6 className="text-[14px]">
+                        {moment(i.createdAt).format("MMMM YYYY")}
+                      </h6>
+                    </div>
+                  ))}
                 </div>
               </div>
               <BsThreeDots className="cursor-pointer" />
@@ -380,8 +388,8 @@ function CurrentUserFeeds() {
             <div className=" " key={item._id}>
               <div className="relative w-full h-[440px]">
                 <Image
-                  src={item.image}
-                  onClick={() => handleToggleBanner(item.image)}
+                  src={item?.productImages[0]}
+                  onClick={() => handleToggleBanner(item.productImages[0])}
                   alt="Store Logo"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="w-full rounded-md cursor-pointer"
@@ -392,12 +400,12 @@ function CurrentUserFeeds() {
               <div className="mt-3">
                 <div>
                   <Link
-                    href={"/"}
+                    href={`/item/${item._id}`}
                     className="flex items-center bg-gray-100 rounded-md p-2 space-x-3"
                   >
                     <div className=" relative rounded-full w-[20px] h-[20px] lg:w-[50px] lg:h-[50px]">
                       <Image
-                        src={item.image}
+                        src={item?.productImages[0]}
                         alt="UserProfileImage"
                         style={{ objectFit: "cover" }}
                         fill
@@ -407,16 +415,16 @@ function CurrentUserFeeds() {
                       />
                     </div>
                     <div className="text-[12px]">
-                      <h6 className="font-bold">{item.name}</h6>
+                      <h6 className="font-bold">{item.productName}</h6>
                       <h6 className="font-bold text-red-600">
-                        Rs {item.price}
+                        Rs {item.productPrice}
                       </h6>
                       <div className="flex items-center space-x-1">
-                        <FaLocationDot /> <span>{item.city}</span>
+                        <FaLocationDot /> <span>{item.sellerLocation}</span>
                       </div>
                     </div>
                   </Link>
-                  <p className="mt-1">{item.description}</p>
+                  <p className="mt-1">{item.productDescription}</p>
                 </div>
                 <div className="mt-10">
                   <hr />

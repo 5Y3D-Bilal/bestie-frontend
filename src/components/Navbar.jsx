@@ -103,11 +103,11 @@ function Navbar() {
                 {currentUser ? (
                   <div className="flex space-x-3 items-center">
                     {currentUser?.storeId ? (
-                      <button className="w-24 h-10 lg:w-28 lg:h-12 bg-white cursor-pointer rounded-3xl border-2 border-[#9748FF] shadow-[inset_0px_-2px_0px_1px_#9748FF] group hover:bg-[#9748FF] transition duration-300 ease-in-out">
+                      <Link href={'/post'} className="flex justify-center items-center w-24 h-10 lg:w-28 lg:h-12 bg-white cursor-pointer rounded-3xl border-2 border-[#9748FF] shadow-[inset_0px_-2px_0px_1px_#9748FF] group hover:bg-[#9748FF] transition duration-300 ease-in-out">
                         <span className="font-medium text-[#333] group-hover:text-white">
                           Post Ads
                         </span>
-                      </button>
+                      </Link>
                     ) : (
                       ""
                     )}

@@ -46,18 +46,19 @@ const getUser = async (id) => {
 };
 
 function AllFeeds({ allProducts, storeData }) {
-  console.log(storeData)
   const [openBannerImageUploader, setOpenBannerImageUploader] = useState(false);
   const [showImage, setShowImage] = useState(false);
   const handleToggleBanner = (image) => {
     setOpenBannerImageUploader((prevState) => !prevState);
     setShowImage(image);
   };
+  const [productId, setProductId] = useState("");
   const [openShareSocials, setOpenShareSocials] = useState(false);
   const [sharingProductName, setSharingProductName] = useState("");
-  const handleOpenShare = (productName) => {
+  const handleOpenShare = (productName, productId) => {
     setOpenShareSocials((prevState) => !prevState);
     setSharingProductName(productName);
+    setProductId(productId)
   };
 
   //   For Scaling the Image
@@ -113,6 +114,7 @@ function AllFeeds({ allProducts, storeData }) {
   const ShareURL = (id) => {
     return `https://bestie-frontend.vercel.app/item/${id}`;
   };
+
   return (
     <>
       {allProducts.map((item) => (
@@ -122,7 +124,7 @@ function AllFeeds({ allProducts, storeData }) {
         >
           <div className="flex justify-between mb-5 items-center">
             <div className="flex items-center  space-x-2">
-              <div className="flex items-center">
+              <Link href={`/profile/${item.storeId}`} className="flex items-center">
                 <div className="border-white border-[6px] relative rounded-full w-[40px] h-[40px] lg:w-[50px] lg:h-[50px]">
                   {storeData.map(
                     (i) =>
@@ -151,7 +153,7 @@ function AllFeeds({ allProducts, storeData }) {
                     {moment(item.createdAt).format("DD MMMM YYYY")}
                   </h6>
                 </div>
-              </div>
+              </Link>
             </div>
             <BsThreeDots className="cursor-pointer" />
           </div>
@@ -187,7 +189,11 @@ function AllFeeds({ allProducts, storeData }) {
                   <div className="text-[12px]">
                     <h6 className="font-bold">{item.productName}</h6>
                     <h6 className="font-bold text-red-600">
-                      Rs {item.productPrice}
+                      Rs{" "}
+                      {item.productPrice.toLocaleString("en-PK", {
+                        currency: "PKR",
+                        minimumFractionDigits: 0,
+                      })}
                     </h6>
                     <div className="flex items-center space-x-1">
                       <FaLocationDot /> <span>{item.sellerLocation}</span>
@@ -209,7 +215,7 @@ function AllFeeds({ allProducts, storeData }) {
                     <span>Comments</span>
                   </div>
                   <div
-                    onClick={() => handleOpenShare(item.name)}
+                    onClick={() => handleOpenShare(item.name, item._id)}
                     className="flex items-center space-x-1 cursor-pointer"
                   >
                     <FaShareNodes />
@@ -288,7 +294,7 @@ function AllFeeds({ allProducts, storeData }) {
               <div className="grid grid-cols-4 gap-5 mt-10">
                 <FacebookShareButton
                   className=" flex flex-col items-center"
-                  url={ShareURL("eaweae")}
+                  url={ShareURL(productId)}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -299,7 +305,7 @@ function AllFeeds({ allProducts, storeData }) {
                 </FacebookShareButton>
                 <WhatsappShareButton
                   className=" flex flex-col items-center"
-                  url={ShareURL("eaweae")}
+                  url={ShareURL(productId)}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -310,7 +316,7 @@ function AllFeeds({ allProducts, storeData }) {
                 </WhatsappShareButton>
                 <EmailShareButton
                   className=" flex flex-col items-center"
-                  url={ShareURL("eaweae")}
+                  url={ShareURL(productId)}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -321,7 +327,7 @@ function AllFeeds({ allProducts, storeData }) {
                 </EmailShareButton>
                 <TwitterShareButton
                   className=" flex flex-col items-center"
-                  url={ShareURL("eaweae")}
+                  url={ShareURL(productId)}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -332,7 +338,7 @@ function AllFeeds({ allProducts, storeData }) {
                 </TwitterShareButton>
                 <TelegramShareButton
                   className=" flex flex-col items-center"
-                  url={ShareURL("eaweae")}
+                  url={ShareURL(productId)}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -343,7 +349,7 @@ function AllFeeds({ allProducts, storeData }) {
                 </TelegramShareButton>
                 <RedditShareButton
                   className=" flex flex-col items-center"
-                  url={ShareURL("eaweae")}
+                  url={ShareURL(productId)}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -354,7 +360,7 @@ function AllFeeds({ allProducts, storeData }) {
                 </RedditShareButton>
                 <LinkedinShareButton
                   className=" flex flex-col items-center"
-                  url={ShareURL("eaweae")}
+                  url={ShareURL(productId)}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >

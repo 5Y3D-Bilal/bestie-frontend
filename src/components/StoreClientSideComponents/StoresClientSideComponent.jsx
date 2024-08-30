@@ -246,7 +246,7 @@ function StoreClientSideComponent({ storesData, verifiedStores }) {
   };
 
   return (
-    <div className="max-w-6xl mx-auto mt-[5rem] lg:mt-[7.5rem]">
+    <div className="max-w-6xl mx-auto mt-[5rem] lg:mt-[7rem]">
       <div className="bg-white z-10 py-5 mb-2 space-x-3 flex px-5 lg:px-10 justify-between sticky top-[80px] lg:top-[90px] overflow-x-auto overflow-y-hidden ">
         {/* Cities Filter */}
         <div className="lg:block hidden w-1/4">
@@ -346,14 +346,14 @@ function StoreClientSideComponent({ storesData, verifiedStores }) {
         </div>
         {/* All Stores */}
         <div className="w-full mx-5 lg:mx-0 lg:w-1/2 mb-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 mb-5 gap-y-3">
+          <div className="grid grid-cols-2 lg:grid-cols-2 mb-5 gap-2 md:gap-y-3">
             {results.slice(0, visibleStores).map((item) => (
               <div
                 className="border-gray-400 border-[0.5px] w-full lg:w-[280px] rounded-md "
                 key={item._id}
               >
                 <Link href={`/profile/${item._id}`}>
-                  <div className="relative h-[240px]">
+                  <div className="relative h-[100px] md:h-[240px]">
                     <Image
                       src={item.storeLogo}
                       alt={item.storeName}
@@ -366,14 +366,14 @@ function StoreClientSideComponent({ storesData, verifiedStores }) {
                 </Link>
                 <div className="p-3">
                   <div>
-                    <h2 className="text-gray-900 mt-1 text-[24px] font-semibold">
+                    <h2 className="text-gray-900 mt-1 text-[18px] md:text-[24px] font-semibold">
                       {item.storeName}
                     </h2>
-                    <p className="truncate text-[18px] mt-3">
+                    <p className="truncate text-[14px] md:text-[18px] mt-3">
                       {item.storeDescription}
                     </p>
                   </div>
-                  <div className="pb-2 pt-2 flex justify-between">
+                  <div className="md:pb-2 pt-2 flex justify-between">
                     <h1 className="text-gray-800">{item.sellerCity}</h1>
                     <h2 className="text-gray-800">{item.storeCategories}</h2>
                   </div>

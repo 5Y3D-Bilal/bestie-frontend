@@ -52,7 +52,7 @@ export default async function StorePage({ params }) {
   return (
     <div>
       <Navbar />
-      <div className="max-w-6xl mx-auto mt-36 mb-10">
+      <div className="max-w-6xl mx-auto mt-20 md:mt-36 mb-10">
         <SingleStoreClientSideComponent
           storeData={storeData}
           storeProduct={storeProduct}

@@ -4,15 +4,21 @@ import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import AllFeeds from "./AllFeeds";
 import Followings from "./Followings";
-import CurrentUserFeeds from './CurrentUserFeeds'
+import CurrentUserFeeds from "./CurrentUserFeeds";
 
 type StoreModelProps = {
   storesData: any;
-  allProducts: any
-  storeData: any
+  allProducts: any;
+  storeData: any;
+  loginedUserProducts: any;
 };
 
-const FeedModel: React.FC<StoreModelProps> = ({ storesData , allProducts, storeData}) => {
+const FeedModel: React.FC<StoreModelProps> = ({
+  storesData,
+  allProducts,
+  storeData,
+  loginedUserProducts,
+}) => {
   const FeedModel = useRecoilValue(StoreModel);
   return (
     <>
@@ -22,8 +28,12 @@ const FeedModel: React.FC<StoreModelProps> = ({ storesData , allProducts, storeD
         ) : FeedModel.type === "followings" ? (
           <Followings />
         ) : FeedModel.type === "currentUser" ? (
-          <CurrentUserFeeds />
-        ): ''}
+          <CurrentUserFeeds
+            logginedUserStoreProductData={loginedUserProducts}
+          />
+        ) : (
+          ""
+        )}
       </div>
     </>
   );

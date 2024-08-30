@@ -39,14 +39,32 @@ const getCurrentUser = async () => {
   }
 };
 
+const getLogginedUserStoreProducts = async (id) => {
+  try {
+    const res = await axios.get(
+      `https://besty-backend.vercel.app/api/users/products/${id}`,
+      {
+        withCredentials: true,
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching stores:", error);
+    throw error;
+  }
+};
+
 function FeedClientSideComponent({ storesData, allProducts, storeData }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [followedStoresData, setFollowedStoresData] = useState([]);
+  const [loginedUserProducts, setLoginedUserProducts] = useState([]);
   useEffect(() => {
     const fetchCurrentUser = async () => {
       const user = await getCurrentUser();
       setCurrentUser(user);
-
+      console.log(user)
+      const loginedUserProducts = await getLogginedUserStoreProducts(user.storeId);
+      setLoginedUserProducts(loginedUserProducts)
       if (user && user.followedStores.length > 0) {
         const followedStores = await getFollowedStores(user.followedStores);
         setFollowedStoresData(followedStores);
@@ -136,6 +154,7 @@ function FeedClientSideComponent({ storesData, allProducts, storeData }) {
                 storesData={storesData}
                 allProducts={allProducts}
                 storeData={storeData}
+                loginedUserProducts={loginedUserProducts}
               />
             </div>
           </div>

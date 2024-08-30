@@ -37,7 +37,7 @@ const allProducts = async () => {
 };
 
 // SSR RENDERING FOR GETTING ALL STORES
-const getUser = async () => {
+const storeDataa = async () => {
   const Feeds = await allProducts();
   const id = Feeds.map((e) => e.storeId);
   try {
@@ -58,7 +58,7 @@ const getUser = async () => {
 async function Feed() {
   const storesData = await getAllStores();
   const Feeds = await allProducts();
-  const storeData = await getUser();
+  const storeData = await storeDataa();
   
   return (
     <div>

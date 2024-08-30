@@ -20,12 +20,20 @@ import {
   EmailShareButton,
   FacebookIcon,
   FacebookShareButton,
+  LinkedinIcon,
+  LinkedinShareButton,
+  RedditIcon,
+  RedditShareButton,
+  TelegramIcon,
+  TelegramShareButton,
   TwitterShareButton,
   WhatsappIcon,
   WhatsappShareButton,
   XIcon,
 } from "react-share";
 import { MdOutlineEmail } from "react-icons/md";
+import { SlPeople } from "react-icons/sl";
+import { SiMicrosoftstore } from "react-icons/si";
 
 function SingleItem({ product, user }) {
   const joinData = moment(user.createdAt).format("MMMM YYYY");
@@ -36,6 +44,7 @@ function SingleItem({ product, user }) {
   const ShareURL = (id) => {
     return `https://bestie-frontend.vercel.app/item/${id}`;
   };
+
 
   const googleMapsUrl = `https://www.google.com/maps?q=${encodeURIComponent(
     product.sellerLocation
@@ -67,11 +76,24 @@ function SingleItem({ product, user }) {
       return `${Math.floor(timeFromNow.asYears())} years ago`;
     }
   }
+  const [productId, setProductId] = useState('');
+  const [openItemShareSocials, setOpenItemShareSocials] = useState(false);
+  const [sharingProductName, setSharingProductName] = useState("");
+  const handleOpenShare = (productName, productId) => {
+    setOpenItemShareSocials((prevState) => !prevState);
+    setProductId(productId);
+    setSharingProductName(productName);
+  };
 
+  const handleOpenPeopleApp = () => {
+    window.location.href = "ms-people://home";
+  };
+
+ 
   return (
     <div className="mt-24 mx-5 max-w-6xl lg:mx-auto">
       <div className="flex flex-col lg:flex-row lg:justify-between lg:space-x-10">
-        <div className="w-full flex flex-col space-y-3">
+        <div className="w-full flex flex-col space-y-3 mb-10">
           <div className="w-full md:border-[0.5px] lg:border-[0.5px] border-gray-300 rounded-lg">
             <EmblaCarousel productImages={product.productImages} />
           </div>
@@ -80,9 +102,13 @@ function SingleItem({ product, user }) {
               <h1 className="text-[25px] font-extrabold">
                 Rs. {formattedNumber}
               </h1>
-              <div className="flex items-center space-x-3">
-                <CiHeart size={30} />
-                <IoShareSocial size={30} />
+              <div className="flex items-center space-x-2">
+                <div className="p-2 rounded-full cursor-pointer">
+                  <CiHeart size={30} />
+                </div>
+                <div onClick={() => handleOpenShare(product.productName,product._id)} className="p-2 rounded-full hover:bg-[#d8b9ff] duration-500  cursor-pointer">
+                  <IoShareSocial size={30} />
+                </div>
               </div>
             </div>
             <div className="mt-4">
@@ -91,7 +117,9 @@ function SingleItem({ product, user }) {
                 <div className="flex items-center text-[14px] space-x-1">
                   <FaLocationDot /> <span>{product.sellerLocation}</span>
                 </div>
-                <span className="text-[14px]">{getTimeFromNow(product.createdAt)}</span>
+                <span className="text-[14px]">
+                  {getTimeFromNow(product.createdAt)}
+                </span>
               </div>
             </div>
           </div>
@@ -101,7 +129,7 @@ function SingleItem({ product, user }) {
             </div>
             <div className="mt-4">
               <div className="flex justify-between mt-4">
-                <ul className="grid grid-cols-3">
+                <ul className="grid grid-cols-1 gap-y-4 list-decimal ml-5">
                   {product.productDetails.map((i) => (
                     <li key={i}>{i}</li>
                   ))}
@@ -111,11 +139,13 @@ function SingleItem({ product, user }) {
           </div>
           <div className="w-full md:border-[0.5px] lg:border-[0.5px] text-gray-700 border-gray-300 rounded-lg p-4">
             <div className="flex items-center justify-between">
-              <h1 className="text-[25px] text-black font-extrabold">Description</h1>
+              <h1 className="text-[25px] text-black font-extrabold">
+                Description
+              </h1>
             </div>
             <div className="mt-4">
               <div className="flex justify-between mt-4">
-                <ul className="grid grid-cols-1 gap-y-4">
+                <ul className="grid grid-cols-1 gap-y-4 list-decimal ml-5">
                   {product.productDescriptionPoints.map((i) => (
                     <li key={i}>{i}</li>
                   ))}
@@ -264,11 +294,11 @@ function SingleItem({ product, user }) {
           </div>
         </div>
       </div>
-      {/* {openShareSocials && (
+      {openItemShareSocials && (
         <div className="w-full h-screen top-0 absolute left-0 z-50  flex justify-center items-center overflow-y-hidden">
           <div
             className="h-screen bg-black opacity-40 top-0 fixed w-full z-10 overflow-y-hidden"
-            onClick={() => setOpenShareSocials(false)}
+            onClick={() => setOpenItemShareSocials(false)}
           />
           <div className="flex items-center bg-[#1b1b1b]  fixed w-[80%] lg:w-[25%]  z-20  rounded-md overflow-y-hidden">
             <div className="w-full h-full overflow-y-hidden flex flex-col items-center my-6 mx-3">
@@ -294,7 +324,7 @@ function SingleItem({ product, user }) {
               <div className="grid grid-cols-4 gap-5 mt-10">
                 <FacebookShareButton
                   className=" flex flex-col items-center"
-                  url={ShareURL(storeData._id)}
+                  url={ShareURL(product._id)}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -305,7 +335,7 @@ function SingleItem({ product, user }) {
                 </FacebookShareButton>
                 <WhatsappShareButton
                   className=" flex flex-col items-center"
-                  url={ShareURL(storeData._id)}
+                  url={ShareURL(product._id)}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -316,7 +346,7 @@ function SingleItem({ product, user }) {
                 </WhatsappShareButton>
                 <EmailShareButton
                   className=" flex flex-col items-center"
-                  url={ShareURL(storeData._id)}
+                  url={ShareURL(product._id)}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -327,7 +357,7 @@ function SingleItem({ product, user }) {
                 </EmailShareButton>
                 <TwitterShareButton
                   className=" flex flex-col items-center"
-                  url={ShareURL(storeData._id)}
+                  url={ShareURL(product._id)}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -338,7 +368,7 @@ function SingleItem({ product, user }) {
                 </TwitterShareButton>
                 <TelegramShareButton
                   className=" flex flex-col items-center"
-                  url={ShareURL(storeData._id)}
+                  url={ShareURL(product._id)}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -349,7 +379,7 @@ function SingleItem({ product, user }) {
                 </TelegramShareButton>
                 <RedditShareButton
                   className=" flex flex-col items-center"
-                  url={ShareURL(storeData._id)}
+                  url={ShareURL(product._id)}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -360,7 +390,7 @@ function SingleItem({ product, user }) {
                 </RedditShareButton>
                 <LinkedinShareButton
                   className=" flex flex-col items-center"
-                  url={ShareURL(storeData._id)}
+                  url={ShareURL(product._id)}
                   quote={"Title or jo bhi aapko likhna ho"}
                   hashtag={"#portfolio..."}
                 >
@@ -383,7 +413,7 @@ function SingleItem({ product, user }) {
             </div>
           </div>
         </div>
-      )} */}
+      )}
     </div>
   );
 }

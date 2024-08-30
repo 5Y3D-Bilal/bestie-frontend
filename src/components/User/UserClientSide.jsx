@@ -20,7 +20,7 @@ function UserClientSide({ userData }) {
   const logout = async () => {
     localStorage.removeItem("token")
     try {
-      const res = await axios.post("http://localhost:4000/api/logout", {}, {
+      const res = await axios.post("https://besty-backend.vercel.app/api/logout", {}, {
         withCredentials: true,
       });
       router.push('/')
